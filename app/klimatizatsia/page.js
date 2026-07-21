@@ -107,7 +107,6 @@ const galleryPhotos = [
   { src: "/images/klimatizatsia-real/klim-10.jpg", alt: "Монтиран котел Viessmann" },
   { src: "/images/klimatizatsia-real/klim-11.jpg", alt: "Табло за управление на котел Viessmann" },
   { src: "/images/klimatizatsia-real/klim-12.jpg", alt: "Сервизно обслужване на климатик" },
-  { src: "/images/klimatizatsia-real/klim-13.jpg", alt: "Табло за управление на отоплителна инсталация" },
 ];
 
 export default function KlimatizatsiaPage() {
