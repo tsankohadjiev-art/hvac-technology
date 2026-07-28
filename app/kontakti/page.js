@@ -18,9 +18,9 @@ export const metadata = {
 
 const FACEBOOK_CLIMATE = "https://www.facebook.com/hvac.technology.bulgaria/";
 const FACEBOOK_POOL = "https://www.facebook.com/profile.php?id=61590323918867";
-const VIBER_LINK = "viber://chat?number=%2B359873472443";
-const WHATSAPP_LINK = "https://wa.me/359873472443";
-const PHONE_LINK = "tel:+359873472443";
+const VIBER_LINK = "viber://chat?number=%2B359893472443";
+const WHATSAPP_LINK = "https://wa.me/359893472443";
+const PHONE_LINK = "tel:+359893472443";
 const MAIL_LINK = "mailto:hvact.mh@gmail.com";
 const MAP_QUERY = "гр. София, кв. Витоша, ул. Андрей Бадев 1";
 const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
@@ -32,7 +32,7 @@ const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
 
 const contactItems = [
   { icon: UsersIcon, label: "инж. Ц. Хаджиев", href: null },
-  { icon: PhoneIcon, label: "+359 87 347 2443", href: PHONE_LINK },
+  { icon: PhoneIcon, label: "+359 89 347 2443", href: PHONE_LINK },
   {
     icon: MailIcon,
     label: "hvact.mh@gmail.com",

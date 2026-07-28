@@ -58,7 +58,7 @@ const localBusinessJsonLd = {
   "@type": "HomeAndConstructionBusiness",
   name: "Hvac Technology",
   url: SITE_URL,
-  telephone: "+359873472443",
+  telephone: "+359893472443",
   email: "hvact.mh@gmail.com",
   address: {
     "@type": "PostalAddress",

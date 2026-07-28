@@ -4,8 +4,8 @@ import Logo from "@/components/Logo";
 
 const FACEBOOK_CLIMATE = "https://www.facebook.com/hvac.technology.bulgaria/";
 const FACEBOOK_POOL = "https://www.facebook.com/profile.php?id=61590323918867";
-const VIBER_LINK = "viber://chat?number=%2B359873472443";
-const WHATSAPP_LINK = "https://wa.me/359873472443";
+const VIBER_LINK = "viber://chat?number=%2B359893472443";
+const WHATSAPP_LINK = "https://wa.me/359893472443";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -84,8 +84,8 @@ export default function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm">
             <li className="text-slate-400">инж. Ц. Хаджиев</li>
             <li>
-              <a href="tel:+359873472443" className="transition-colors hover:text-white">
-                +359 87 347 2443
+              <a href="tel:+359893472443" className="transition-colors hover:text-white">
+                +359 89 347 2443
               </a>
             </li>
             <li>
