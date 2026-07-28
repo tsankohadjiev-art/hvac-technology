@@ -13,7 +13,7 @@ import {
 } from "@/components/Icons";
 
 export const metadata = {
-  title: "Басейни, СПА и водни съоръжения | Hvac Technology",
+  title: "Басейни, СПА и водни съоръжения",
   description:
     "Проектиране, изграждане и поддръжка на басейни, СПА центрове и водни съоръжения от Hvac Technology.",
 };

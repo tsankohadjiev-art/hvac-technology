@@ -16,7 +16,7 @@ import {
 } from "@/components/Icons";
 
 export const metadata = {
-  title: "Климатизация и отопление | Hvac Technology",
+  title: "Климатизация и отопление",
   description:
     "Проектиране, доставка, монтаж и сервиз на климатични и отоплителни системи от Hvac Technology.",
 };

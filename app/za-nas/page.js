@@ -10,7 +10,7 @@ import {
 } from "@/components/Icons";
 
 export const metadata = {
-  title: "За нас | Hvac Technology",
+  title: "За нас",
   description:
     "Hvac Technology обединява две направления — климатизация и отопление, и басейни, СПА и водни съоръжения.",
 };

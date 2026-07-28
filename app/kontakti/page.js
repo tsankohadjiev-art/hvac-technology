@@ -11,7 +11,7 @@ import {
 } from "@/components/Icons";
 
 export const metadata = {
-  title: "Контакти | Hvac Technology",
+  title: "Контакти",
   description:
     "Свържете се с Hvac Technology за климатизация, отопление, басейни, СПА и водни съоръжения.",
 };
