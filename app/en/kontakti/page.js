@@ -30,11 +30,13 @@ const WHATSAPP_LINK = "https://wa.me/359893472443";
 const PHONE_LINK = "tel:+359893472443";
 const MAIL_LINK = "mailto:hvact.mh@gmail.com";
 const MAP_QUERY = "Sofia, Vitosha, Andrey Badev St. 1, Bulgaria";
+// Google Maps geocodes Bulgarian street addresses more reliably in Bulgarian.
+const MAP_GEOCODE_QUERY = "гр. София, кв. Витоша, ул. Андрей Бадев 1";
 const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
-  MAP_QUERY
+  MAP_GEOCODE_QUERY
 )}&z=15&output=embed`;
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  MAP_QUERY
+  MAP_GEOCODE_QUERY
 )}`;
 
 const contactItems = [
