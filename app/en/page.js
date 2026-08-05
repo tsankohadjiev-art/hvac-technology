@@ -11,6 +11,14 @@ import {
   WrenchIcon,
 } from "@/components/Icons";
 
+export const metadata = {
+  title: {
+    absolute: "Hvac Technology — Air Conditioning & Heating · Pools & Spa",
+  },
+  description:
+    "Hvac Technology offers complete solutions in two directions: air conditioning and heating, as well as pools, spa and water facilities in Sofia, Bulgaria.",
+};
+
 const directions = [
   {
     href: "/en/klimatizatsia",
