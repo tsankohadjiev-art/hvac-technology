@@ -1,7 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +35,10 @@ export const metadata = {
   ],
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      "bg-BG": SITE_URL,
+      "en-US": `${SITE_URL}/en`,
+    },
   },
   openGraph: {
     type: "website",
@@ -88,9 +90,7 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
         />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

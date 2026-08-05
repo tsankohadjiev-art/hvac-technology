@@ -9,10 +9,33 @@ export default function sitemap() {
     { path: "/kontakti", priority: 0.7, changeFrequency: "yearly" },
   ];
 
-  return routes.map((route) => ({
-    url: `${BASE_URL}${route.path}`,
-    lastModified: new Date(),
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
-  }));
+  const now = new Date();
+
+  return routes.flatMap((route) => {
+    const bgUrl = `${BASE_URL}${route.path}`;
+    const enUrl = `${BASE_URL}/en${route.path}`;
+    const alternates = {
+      languages: {
+        "bg-BG": bgUrl,
+        "en-US": enUrl,
+      },
+    };
+
+    return [
+      {
+        url: bgUrl,
+        lastModified: now,
+        changeFrequency: route.changeFrequency,
+        priority: route.priority,
+        alternates,
+      },
+      {
+        url: enUrl,
+        lastModified: now,
+        changeFrequency: route.changeFrequency,
+        priority: route.priority * 0.9,
+        alternates,
+      },
+    ];
+  });
 }
