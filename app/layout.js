@@ -61,7 +61,7 @@ const localBusinessJsonLd = {
   name: "Hvac Technology",
   url: SITE_URL,
   telephone: "+359893472443",
-  email: "hvact.mh@gmail.com",
+  email: "office@hvactechnology.eu",
   address: {
     "@type": "PostalAddress",
     streetAddress: "ул. Андрей Бадев 1, кв. Витоша",

@@ -133,10 +133,10 @@ export default function Footer({ lang = "bg" }) {
             </li>
             <li>
               <a
-                href="mailto:hvact.mh@gmail.com"
+                href="mailto:office@hvactechnology.eu"
                 className="transition-colors hover:text-white"
               >
-                hvact.mh@gmail.com
+                office@hvactechnology.eu
               </a>
             </li>
             <li className="text-slate-400">{t.address}</li>

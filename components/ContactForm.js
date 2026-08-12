@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const CONTACT_EMAIL = "hvact.mh@gmail.com";
+const CONTACT_EMAIL = "office@hvactechnology.eu";
 
 const TEXT = {
   bg: {

@@ -28,7 +28,7 @@ const FACEBOOK_POOL = "https://www.facebook.com/profile.php?id=61590323918867";
 const VIBER_LINK = "viber://chat?number=%2B359893472443";
 const WHATSAPP_LINK = "https://wa.me/359893472443";
 const PHONE_LINK = "tel:+359893472443";
-const MAIL_LINK = "mailto:hvact.mh@gmail.com";
+const MAIL_LINK = "mailto:office@hvactechnology.eu";
 const MAP_QUERY = "Sofia, Vitosha, Andrey Badev St. 1, Bulgaria";
 // Google Maps geocodes Bulgarian street addresses more reliably in Bulgarian.
 const MAP_GEOCODE_QUERY = "гр. София, кв. Витоша, ул. Андрей Бадев 1";
@@ -44,7 +44,7 @@ const contactItems = [
   { icon: PhoneIcon, label: "+359 89 347 2443", href: PHONE_LINK },
   {
     icon: MailIcon,
-    label: "hvact.mh@gmail.com",
+    label: "office@hvactechnology.eu",
     href: MAIL_LINK,
   },
   { icon: MapPinIcon, label: "Sofia, Vitosha, Andrey Badev St. 1, Bulgaria", href: MAP_LINK },
