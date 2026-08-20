@@ -285,3 +285,49 @@ export function XIcon(props) {
     </svg>
   );
 }
+
+export function PencilIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 20l.9-4.2L16.5 4.2a1.8 1.8 0 0 1 2.5 0l.8.8a1.8 1.8 0 0 1 0 2.5L8.2 19.1 4 20z" />
+      <path d="M14.5 6.2l3.3 3.3" />
+    </svg>
+  );
+}
+
+export function TrashIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 7h16M9 7V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V7M6 7l1 13a2 2 0 0 0 2 1.8h6a2 2 0 0 0 2-1.8l1-13" />
+      <path d="M10 11v6M14 11v6" />
+    </svg>
+  );
+}
+
+export function ImageIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.7" fill="currentColor" stroke="none" />
+      <path d="M4 17l5-5 4 4 3-3 4 4" />
+    </svg>
+  );
+}
+
+export function LockIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+    </svg>
+  );
+}
+
+export function LogOutIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" />
+      <path d="M15 8l4 4-4 4M19 12H9" />
+    </svg>
+  );
+}

@@ -6,7 +6,7 @@ import { useState } from "react";
 import Logo from "@/components/Logo";
 import { CartIcon } from "@/components/Icons";
 
-const SHOP_URL = process.env.NEXT_PUBLIC_SHOP_URL || "http://localhost:3001";
+const SHOP_HREF = "/magazin";
 const SHOP_LABEL = { bg: "Онлайн магазин", en: "Online Shop" };
 
 const NAV_LINKS = {
@@ -110,15 +110,13 @@ export default function Header({ lang = "bg" }) {
 
         <div className="hidden items-center gap-4 lg:flex">
           <LanguageSwitcher lang={lang} pathname={pathname} />
-          <a
-            href={SHOP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={SHOP_HREF}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-climate to-aqua px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
           >
             <CartIcon className="h-4 w-4" />
             {SHOP_LABEL[lang]}
-          </a>
+          </Link>
           <Link
             href={CTA_HREF[lang]}
             className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light"
@@ -128,15 +126,13 @@ export default function Header({ lang = "bg" }) {
         </div>
 
         <div className="flex items-center gap-3 lg:hidden">
-          <a
-            href={SHOP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={SHOP_HREF}
             aria-label={SHOP_LABEL[lang]}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-climate to-aqua text-white shadow-sm"
           >
             <CartIcon className="h-4 w-4" />
-          </a>
+          </Link>
           <LanguageSwitcher lang={lang} pathname={pathname} />
           <button
             type="button"
@@ -157,16 +153,14 @@ export default function Header({ lang = "bg" }) {
       {open && (
         <div className="border-t border-slate-200 bg-white lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
-            <a
-              href={SHOP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={SHOP_HREF}
               onClick={() => setOpen(false)}
               className="mb-2 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-climate to-aqua px-3 py-2.5 text-sm font-semibold text-white"
             >
               <CartIcon className="h-4 w-4" />
               {SHOP_LABEL[lang]}
-            </a>
+            </Link>
             {navLinks.map((link) => (
               <Link
                 key={link.href}

@@ -164,7 +164,10 @@ export default function Footer({ lang = "bg" }) {
 
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-slate-500 lg:px-8">
-          &copy; {year} Hvac Technology. {t.rights}
+          <p>&copy; {year} Hvac Technology. {t.rights}</p>
+          <Link href="/admin" className="mt-1 inline-block hover:text-slate-300">
+            Админ
+          </Link>
         </div>
       </div>
     </footer>
