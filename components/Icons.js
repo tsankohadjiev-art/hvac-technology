@@ -215,3 +215,73 @@ export function MapPinFilledIcon(props) {
     </svg>
   );
 }
+
+export function CartIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M3 4h2.2l1 2M6.2 6H21l-2 8H8.5L6.2 6z" />
+      <path d="M8.5 14L7 4" />
+      <circle cx="9.5" cy="19.5" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="17.5" cy="19.5" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function SearchIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="M20 20l-4.8-4.8" />
+    </svg>
+  );
+}
+
+export function FilterIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 21a4 4 0 0 0 4-4V9.5L20.5 4H3.5L9 9.5V17a4 4 0 0 0 3 0z" />
+    </svg>
+  );
+}
+
+export function BulbIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9 18h6M10 21h4" />
+      <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9v.2h5v-.2c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3z" />
+    </svg>
+  );
+}
+
+export function SunIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="4.2" />
+      <path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6" />
+    </svg>
+  );
+}
+
+export function PlusIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function MinusIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+export function XIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M5 5l14 14M19 5L5 19" />
+    </svg>
+  );
+}
