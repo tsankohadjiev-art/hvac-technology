@@ -127,7 +127,7 @@ export default function CartDrawer() {
                   : "Крайната цена се потвърждава след запитването — без онлайн плащане."}
               </p>
               <Link
-                href="/poruchka"
+                href="/magazin/poruchka"
                 onClick={closeDrawer}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-light"
               >

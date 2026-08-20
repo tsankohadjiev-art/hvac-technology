@@ -89,7 +89,7 @@ export default function CheckoutForm() {
         <h1 className="text-2xl font-bold text-ink">Количката е празна</h1>
         <p className="mt-3 text-slate">Добавете продукти от каталога, за да продължите към поръчка.</p>
         <Link
-          href="/"
+          href="/magazin"
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white hover:bg-navy-light"
         >
           Към продуктите
@@ -112,7 +112,7 @@ export default function CheckoutForm() {
           ръчно до {CONTACT_EMAIL} от вашата поща.
         </p>
         <Link
-          href="/"
+          href="/magazin"
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white hover:bg-navy-light"
         >
           Обратно към магазина
