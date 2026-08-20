@@ -6,7 +6,8 @@ import crypto from "node:crypto";
 
 const ALLOWED = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
 const MAX_SIZE = 5 * 1024 * 1024;
-const useBlob = !!process.env.BLOB_READ_WRITE_TOKEN;
+const BLOB_STORE_ID = process.env.BLOB_STORE_ID;
+const useBlob = !!BLOB_STORE_ID;
 
 export async function POST(request) {
   let formData;
@@ -34,6 +35,7 @@ export async function POST(request) {
     const blob = await put(`uploads/${filename}`, file, {
       access: "public",
       contentType: file.type,
+      storeId: BLOB_STORE_ID,
     });
     return NextResponse.json({ url: blob.url });
   }
