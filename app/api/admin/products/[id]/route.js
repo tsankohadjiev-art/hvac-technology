@@ -30,7 +30,7 @@ function normalize(body, fallback) {
 
 export async function PATCH(request, { params }) {
   const { id } = await params;
-  const existing = getProductById(id);
+  const existing = await getProductById(id);
   if (!existing) {
     return NextResponse.json({ error: "Продуктът не е намерен." }, { status: 404 });
   }
@@ -48,16 +48,16 @@ export async function PATCH(request, { params }) {
   }
 
   const updated = { id, ...normalized };
-  upsertProduct(updated);
+  await upsertProduct(updated);
   return NextResponse.json(updated);
 }
 
 export async function DELETE(request, { params }) {
   const { id } = await params;
-  const existing = getProductById(id);
+  const existing = await getProductById(id);
   if (!existing) {
     return NextResponse.json({ error: "Продуктът не е намерен." }, { status: 404 });
   }
-  deleteProduct(id);
+  await deleteProduct(id);
   return NextResponse.json({ ok: true });
 }

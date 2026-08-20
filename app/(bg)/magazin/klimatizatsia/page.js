@@ -7,8 +7,8 @@ export const metadata = {
   title: "Климатизация и ОВК — магазин",
 };
 
-export default function ClimateShopPage() {
-  const products = readProducts();
+export default async function ClimateShopPage() {
+  const products = await readProducts();
   return (
     <ShopCatalog
       products={products}

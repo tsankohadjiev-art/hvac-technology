@@ -20,7 +20,7 @@ function normalize(body) {
 }
 
 export async function GET() {
-  return NextResponse.json(readProducts());
+  return NextResponse.json(await readProducts());
 }
 
 export async function POST(request) {
@@ -36,8 +36,8 @@ export async function POST(request) {
     return NextResponse.json({ error: "Името на продукта е задължително." }, { status: 400 });
   }
 
-  const id = generateId(normalized.zone);
+  const id = await generateId(normalized.zone);
   const product = { id, ...normalized };
-  upsertProduct(product);
+  await upsertProduct(product);
   return NextResponse.json(product, { status: 201 });
 }

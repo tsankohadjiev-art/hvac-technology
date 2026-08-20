@@ -7,7 +7,7 @@ export const metadata = {
   title: "Всички продукти — магазин",
 };
 
-export default function CatalogPage() {
-  const products = readProducts();
+export default async function CatalogPage() {
+  const products = await readProducts();
   return <ShopCatalog products={products} initialZone="all" />;
 }

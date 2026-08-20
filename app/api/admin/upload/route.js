@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
 const ALLOWED = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
 const MAX_SIZE = 5 * 1024 * 1024;
+const useBlob = !!process.env.BLOB_READ_WRITE_TOKEN;
 
 export async function POST(request) {
   let formData;
@@ -27,9 +29,17 @@ export async function POST(request) {
 
   const ext = ALLOWED[file.type];
   const filename = `${crypto.randomUUID()}.${ext}`;
+
+  if (useBlob) {
+    const blob = await put(`uploads/${filename}`, file, {
+      access: "public",
+      contentType: file.type,
+    });
+    return NextResponse.json({ url: blob.url });
+  }
+
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   fs.mkdirSync(uploadDir, { recursive: true });
-
   const buffer = Buffer.from(await file.arrayBuffer());
   fs.writeFileSync(path.join(uploadDir, filename), buffer);
 

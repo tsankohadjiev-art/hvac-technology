@@ -3,7 +3,7 @@ import AdminDashboard from "./AdminDashboard";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminPage() {
-  const products = readProducts();
+export default async function AdminPage() {
+  const products = await readProducts();
   return <AdminDashboard initialProducts={products} />;
 }

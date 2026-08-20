@@ -7,8 +7,8 @@ export const metadata = {
   title: "Басейни и СПА — магазин",
 };
 
-export default function PoolShopPage() {
-  const products = readProducts();
+export default async function PoolShopPage() {
+  const products = await readProducts();
   return (
     <ShopCatalog
       products={products}
