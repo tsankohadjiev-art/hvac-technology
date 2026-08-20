@@ -6,8 +6,8 @@ import crypto from "node:crypto";
 
 const ALLOWED = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
 const MAX_SIZE = 5 * 1024 * 1024;
-const BLOB_STORE_ID = process.env.BLOB_STORE_ID;
-const useBlob = !!BLOB_STORE_ID;
+const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+const useBlob = !!BLOB_TOKEN;
 
 export async function POST(request) {
   let formData;
@@ -36,7 +36,7 @@ export async function POST(request) {
     await put(pathname, file, {
       access: "private",
       contentType: file.type,
-      storeId: BLOB_STORE_ID,
+      token: BLOB_TOKEN,
     });
     // Хранилището е частно, затова снимките се обслужват през собствен
     // маршрут вместо директния (защитен) адрес на Blob.

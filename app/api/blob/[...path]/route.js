@@ -1,20 +1,18 @@
 import { head } from "@vercel/blob";
 
-const BLOB_STORE_ID = process.env.BLOB_STORE_ID;
+const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
 
 // Хранилището е частно, затова обслужваме снимките през този маршрут:
-// взимаме адреса от Blob сървърно (с OIDC удостоверяване) и го препращаме
-// на посетителя, вместо той да вика директно защитения адрес на Blob.
+// взимаме адреса от Blob сървърно (с token) и го препращаме на посетителя,
+// вместо той да вика директно защитения адрес на Blob.
 export async function GET(request, { params }) {
   const { path } = await params;
   const pathname = path.join("/");
 
   try {
-    const info = await head(pathname, { storeId: BLOB_STORE_ID });
+    const info = await head(pathname, { token: BLOB_TOKEN });
     const res = await fetch(info.url, {
-      headers: process.env.VERCEL_OIDC_TOKEN
-        ? { Authorization: `Bearer ${process.env.VERCEL_OIDC_TOKEN}` }
-        : {},
+      headers: { Authorization: `Bearer ${BLOB_TOKEN}` },
     });
 
     if (!res.ok || !res.body) {
