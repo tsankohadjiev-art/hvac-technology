@@ -32,12 +32,15 @@ export async function POST(request) {
   const filename = `${crypto.randomUUID()}.${ext}`;
 
   if (useBlob) {
-    const blob = await put(`uploads/${filename}`, file, {
-      access: "public",
+    const pathname = `uploads/${filename}`;
+    await put(pathname, file, {
+      access: "private",
       contentType: file.type,
       storeId: BLOB_STORE_ID,
     });
-    return NextResponse.json({ url: blob.url });
+    // Хранилището е частно, затова снимките се обслужват през собствен
+    // маршрут вместо директния (защитен) адрес на Blob.
+    return NextResponse.json({ url: `/api/blob/${pathname}` });
   }
 
   const uploadDir = path.join(process.cwd(), "public", "uploads");
