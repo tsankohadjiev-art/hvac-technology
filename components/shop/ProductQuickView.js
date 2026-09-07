@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useCart } from "./CartContext";
-import { formatPrice, getDiscountPercent, hasPrice } from "@/lib/products";
+import { formatPrice, getDiscountPercent, hasPrice, normalizeSpecs } from "@/lib/products";
 import { resolveIcon } from "@/lib/icons";
 import { XIcon, MinusIcon, PlusIcon, CheckIcon } from "@/components/Icons";
 
@@ -30,6 +30,7 @@ export default function ProductQuickView({ product, onClose }) {
 
   const discount = getDiscountPercent(product);
   const Icon = resolveIcon(product.icon);
+  const specs = normalizeSpecs(product.specs);
 
   function handleAdd() {
     addItem(product, qty);
@@ -73,14 +74,52 @@ export default function ProductQuickView({ product, onClose }) {
           <h2 className="mt-1.5 text-2xl font-bold text-ink">{product.name}</h2>
           <p className="mt-3 leading-relaxed text-slate">{product.description}</p>
 
-          <ul className="mt-5 space-y-2">
-            {product.specs.map((spec) => (
-              <li key={spec} className="flex items-start gap-2.5 text-sm text-ink">
-                <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-climate-dark" />
-                {spec}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-5 space-y-4">
+            {specs.map((spec, idx) => {
+              if (spec.type === "table") {
+                return (
+                  <div key={idx} className="overflow-x-auto rounded-lg border border-slate-200">
+                    <table className="w-full border-collapse text-sm">
+                      <tbody>
+                        {spec.rows.map((row, rowIdx) => (
+                          <tr key={rowIdx} className={rowIdx === 0 ? "bg-mist" : ""}>
+                            {row.map((cell, cellIdx) => (
+                              <td
+                                key={cellIdx}
+                                className={`border border-slate-200 px-3 py-2 text-ink ${
+                                  rowIdx === 0 ? "font-semibold" : ""
+                                }`}
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              }
+              if (spec.type === "image") {
+                return (
+                  <figure key={idx}>
+                    <div className="relative h-56 w-full overflow-hidden rounded-lg bg-mist">
+                      <Image src={spec.src} alt={spec.caption || product.name} fill sizes="100vw" className="object-cover" />
+                    </div>
+                    {spec.caption && (
+                      <figcaption className="mt-1.5 text-xs text-slate">{spec.caption}</figcaption>
+                    )}
+                  </figure>
+                );
+              }
+              return (
+                <div key={idx} className="flex items-start gap-2.5 text-sm text-ink">
+                  <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-climate-dark" />
+                  {spec.value}
+                </div>
+              );
+            })}
+          </div>
 
           <div className="mt-7 flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
             {hasPrice(product) ? (

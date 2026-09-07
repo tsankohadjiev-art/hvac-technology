@@ -11,7 +11,7 @@ const EMPTY_PRODUCT = {
   category: "",
   name: "",
   description: "",
-  specs: [""],
+  specs: [],
   price: "",
   oldPrice: "",
   image: null,
@@ -19,13 +19,25 @@ const EMPTY_PRODUCT = {
   badge: "",
 };
 
+// Спецификациите в admin формата винаги се пазят като обекти (за разлика от
+// стария формат, който можеше да е чист текстов масив) — тук стария формат
+// се преобразува към новия, за да може да се редактира с новия editor.
+function toEditableSpec(item) {
+  if (typeof item === "string") return { type: "text", value: item };
+  if (item?.type === "image") return { type: "image", src: item.src || "", caption: item.caption || "" };
+  if (item?.type === "table") {
+    return { type: "table", rows: (item.rows || []).map((row) => [...row]) };
+  }
+  return { type: "text", value: item?.value || "" };
+}
+
 export default function ProductForm({ product, onClose, onSaved }) {
   const isNew = !product;
   const [form, setForm] = useState(() =>
     product
       ? {
           ...product,
-          specs: product.specs?.length ? product.specs : [""],
+          specs: (product.specs || []).map(toEditableSpec),
           price: product.price ?? "",
           oldPrice: product.oldPrice ?? "",
           badge: product.badge ?? "",
@@ -33,6 +45,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
       : { ...EMPTY_PRODUCT }
   );
   const [uploading, setUploading] = useState(false);
+  const [uploadingSpecIndex, setUploadingSpecIndex] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,20 +61,93 @@ export default function ProductForm({ product, onClose, onSaved }) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  function updateSpec(index, value) {
+  function updateSpecs(updater) {
     setForm((prev) => {
       const specs = [...prev.specs];
-      specs[index] = value;
+      updater(specs);
       return { ...prev, specs };
     });
   }
 
-  function addSpec() {
-    setForm((prev) => ({ ...prev, specs: [...prev.specs, ""] }));
+  function addTextSpec() {
+    updateSpecs((specs) => specs.push({ type: "text", value: "" }));
+  }
+
+  function addTableSpec() {
+    updateSpecs((specs) =>
+      specs.push({
+        type: "table",
+        rows: [
+          ["", ""],
+          ["", ""],
+        ],
+      })
+    );
+  }
+
+  function addImageSpec() {
+    updateSpecs((specs) => specs.push({ type: "image", src: "", caption: "" }));
   }
 
   function removeSpec(index) {
-    setForm((prev) => ({ ...prev, specs: prev.specs.filter((_, i) => i !== index) }));
+    updateSpecs((specs) => specs.splice(index, 1));
+  }
+
+  function updateTextSpec(index, value) {
+    updateSpecs((specs) => {
+      specs[index] = { ...specs[index], value };
+    });
+  }
+
+  function updateImageCaption(index, caption) {
+    updateSpecs((specs) => {
+      specs[index] = { ...specs[index], caption };
+    });
+  }
+
+  function updateTableCell(index, rowIdx, cellIdx, value) {
+    updateSpecs((specs) => {
+      const rows = specs[index].rows.map((row) => [...row]);
+      rows[rowIdx][cellIdx] = value;
+      specs[index] = { ...specs[index], rows };
+    });
+  }
+
+  function addTableRow(index) {
+    updateSpecs((specs) => {
+      const cols = specs[index].rows[0]?.length || 2;
+      specs[index] = { ...specs[index], rows: [...specs[index].rows, Array(cols).fill("")] };
+    });
+  }
+
+  function removeTableRow(index, rowIdx) {
+    updateSpecs((specs) => {
+      specs[index] = { ...specs[index], rows: specs[index].rows.filter((_, i) => i !== rowIdx) };
+    });
+  }
+
+  function addTableColumn(index) {
+    updateSpecs((specs) => {
+      specs[index] = { ...specs[index], rows: specs[index].rows.map((row) => [...row, ""]) };
+    });
+  }
+
+  function removeTableColumn(index, colIdx) {
+    updateSpecs((specs) => {
+      specs[index] = {
+        ...specs[index],
+        rows: specs[index].rows.map((row) => row.filter((_, i) => i !== colIdx)),
+      };
+    });
+  }
+
+  async function uploadFile(file) {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Грешка при качване.");
+    return data.url;
   }
 
   async function handleImageChange(e) {
@@ -70,16 +156,29 @@ export default function ProductForm({ product, onClose, onSaved }) {
     setUploading(true);
     setError("");
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Грешка при качване.");
-      update("image", data.url);
+      update("image", await uploadFile(file));
     } catch (err) {
       setError(err.message);
     } finally {
       setUploading(false);
+      e.target.value = "";
+    }
+  }
+
+  async function handleSpecImageChange(index, e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingSpecIndex(index);
+    setError("");
+    try {
+      const url = await uploadFile(file);
+      updateSpecs((specs) => {
+        specs[index] = { ...specs[index], src: url };
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingSpecIndex(null);
       e.target.value = "";
     }
   }
@@ -91,7 +190,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
 
     const payload = {
       ...form,
-      specs: form.specs.map((s) => s.trim()).filter(Boolean),
+      specs: form.specs,
       price: form.price === "" ? null : Number(form.price),
       oldPrice: form.oldPrice === "" ? null : Number(form.oldPrice),
     };
@@ -186,34 +285,183 @@ export default function ProductForm({ product, onClose, onSaved }) {
 
           <div>
             <span className="text-sm font-medium text-ink">Спецификации</span>
-            <div className="mt-1.5 grid gap-2">
+            <div className="mt-1.5 grid gap-3">
               {form.specs.map((spec, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={spec}
-                    onChange={(e) => updateSpec(idx, e.target.value)}
-                    placeholder={`Спецификация ${idx + 1}`}
-                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeSpec(idx)}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 hover:text-red-500"
-                    aria-label="Премахни"
-                  >
-                    <XIcon className="h-4 w-4" />
-                  </button>
+                <div key={idx} className="rounded-lg border border-slate-200 p-3">
+                  {spec.type === "text" && (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={spec.value}
+                        onChange={(e) => updateTextSpec(idx, e.target.value)}
+                        placeholder={`Спецификация ${idx + 1}`}
+                        className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeSpec(idx)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 hover:text-red-500"
+                        aria-label="Премахни"
+                      >
+                        <XIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  {spec.type === "table" && (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate">
+                          Таблица
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeSpec(idx)}
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-slate-400 hover:text-red-500"
+                          aria-label="Премахни таблицата"
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="border-collapse">
+                          <tbody>
+                            {spec.rows.map((row, rowIdx) => (
+                              <tr key={rowIdx}>
+                                {row.map((cell, cellIdx) => (
+                                  <td key={cellIdx} className="border border-slate-200 p-1">
+                                    <input
+                                      type="text"
+                                      value={cell}
+                                      onChange={(e) => updateTableCell(idx, rowIdx, cellIdx, e.target.value)}
+                                      className="w-28 rounded border-none px-2 py-1.5 text-sm text-ink outline-none focus:ring-2 focus:ring-climate/20"
+                                    />
+                                  </td>
+                                ))}
+                                <td className="border-none p-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeTableRow(idx, rowIdx)}
+                                    disabled={spec.rows.length <= 1}
+                                    className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:text-red-500 disabled:opacity-30"
+                                    aria-label="Премахни реда"
+                                  >
+                                    <XIcon className="h-3.5 w-3.5" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                            <tr>
+                              {spec.rows[0]?.map((_, colIdx) => (
+                                <td key={colIdx} className="border-none p-1 text-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeTableColumn(idx, colIdx)}
+                                    disabled={spec.rows[0].length <= 1}
+                                    className="text-[11px] font-medium text-slate-400 hover:text-red-500 disabled:opacity-30"
+                                  >
+                                    − колона
+                                  </button>
+                                </td>
+                              ))}
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => addTableRow(idx)}
+                          className="inline-flex items-center gap-1 rounded-full bg-mist px-3 py-1 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
+                        >
+                          <PlusIcon className="h-3 w-3" />
+                          Ред
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => addTableColumn(idx)}
+                          className="inline-flex items-center gap-1 rounded-full bg-mist px-3 py-1 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
+                        >
+                          <PlusIcon className="h-3 w-3" />
+                          Колона
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {spec.type === "image" && (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate">
+                          Снимка
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeSpec(idx)}
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-slate-400 hover:text-red-500"
+                          aria-label="Премахни снимката"
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-mist">
+                          {spec.src ? (
+                            <div className="relative h-full w-full">
+                              <Image src={spec.src} alt="" fill className="object-cover" />
+                            </div>
+                          ) : (
+                            <ImageIcon className="h-6 w-6 text-slate-400" />
+                          )}
+                        </div>
+                        <label className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink">
+                          {uploadingSpecIndex === idx ? "Качване..." : "Качи снимка"}
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            onChange={(e) => handleSpecImageChange(idx, e)}
+                            disabled={uploadingSpecIndex === idx}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        value={spec.caption}
+                        onChange={(e) => updateImageCaption(idx, e.target.value)}
+                        placeholder="Надпис към снимката (незадължително)"
+                        className="mt-2 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={addSpec}
-                className="inline-flex items-center gap-1.5 self-start rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
-              >
-                <PlusIcon className="h-3.5 w-3.5" />
-                Добави спецификация
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={addTextSpec}
+                  className="inline-flex items-center gap-1.5 self-start rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
+                >
+                  <PlusIcon className="h-3.5 w-3.5" />
+                  Добави текст
+                </button>
+                <button
+                  type="button"
+                  onClick={addTableSpec}
+                  className="inline-flex items-center gap-1.5 self-start rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
+                >
+                  <PlusIcon className="h-3.5 w-3.5" />
+                  Добави таблица
+                </button>
+                <button
+                  type="button"
+                  onClick={addImageSpec}
+                  className="inline-flex items-center gap-1.5 self-start rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-slate hover:bg-slate-200 hover:text-ink"
+                >
+                  <PlusIcon className="h-3.5 w-3.5" />
+                  Добави снимка
+                </button>
+              </div>
             </div>
           </div>
 
