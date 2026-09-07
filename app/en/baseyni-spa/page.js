@@ -3,14 +3,8 @@ import PageHero from "@/components/PageHero";
 import ServiceGrid from "@/components/ServiceGrid";
 import ProcessSteps from "@/components/ProcessSteps";
 import CtaBanner from "@/components/CtaBanner";
-import {
-  WavesIcon,
-  SparklesIcon,
-  DropletIcon,
-  ShieldCheckIcon,
-  RulerIcon,
-  WrenchIcon,
-} from "@/components/Icons";
+import { readSettings } from "@/lib/settingsStore";
+import { resolveIcon } from "@/lib/icons";
 
 export const metadata = {
   title: "Pools, Spa & Water Facilities",
@@ -25,51 +19,23 @@ export const metadata = {
   },
 };
 
-const services = [
-  {
-    icon: WavesIcon,
-    title: "Pool Construction",
-    description:
-      "Design and construction of pools for homes, hotels and public facilities.",
-  },
-  {
-    icon: SparklesIcon,
-    title: "Spa & Wellness Centers",
-    description:
-      "Complete equipping of spa areas for relaxation, recovery and a wellness experience.",
-  },
-  {
-    icon: DropletIcon,
-    title: "Jacuzzis & Hot Tubs",
-    description: "Supply and installation of jacuzzis and hot tubs for home and business.",
-  },
-  {
-    icon: ShieldCheckIcon,
-    title: "Water Purification",
-    description:
-      "Filtration and disinfection systems that guarantee clean and safe water.",
-  },
-  {
-    icon: RulerIcon,
-    title: "Design & Tiling",
-    description:
-      "Individual projects and quality tiling, tailored to the vision of the site.",
-  },
-  {
-    icon: WrenchIcon,
-    title: "Maintenance & Service",
-    description:
-      "Regular servicing and maintenance of pools, spa facilities and water equipment.",
-  },
-];
+export default async function BaseyniSpaPageEn() {
+  const settings = await readSettings();
+  const page = settings.pages.baseyniSpa;
+  const t = page.en;
 
-export default function BaseyniSpaPageEn() {
+  const services = page.services.map((s) => ({
+    icon: resolveIcon(s.icon),
+    title: s.title.en,
+    description: s.description.en,
+  }));
+
   return (
     <>
       <PageHero
         theme="aqua"
-        title="Pools, Spa & Water Facilities"
-        description="Integrated Building Systems Engineering — we design and build by treating the site as one ecosystem. This is the integrated approach used in designing modern spa complexes, pools, water parks, and top-class wellness centers. The two divisions of Hvac Technology working together enable a sound concept, a flawless project, smooth execution and long-term operation for the benefit of investors and clients."
+        title={t.heroTitle}
+        description={t.heroDescription}
         logo={
           <span className="flex items-center gap-2.5">
             <Image
@@ -90,7 +56,7 @@ export default function BaseyniSpaPageEn() {
       <section className="mx-auto max-w-7xl px-6 pt-16 lg:px-8">
         <div className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-mist sm:aspect-[21/9]">
           <Image
-            src="/images/baseyni-spa-real/pool-01.jpg"
+            src={page.showcaseImage}
             alt="Infinity pool built by Hvac Technology"
             fill
             priority
@@ -103,11 +69,9 @@ export default function BaseyniSpaPageEn() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
-            Our Services
+            {t.servicesEyebrow}
           </h2>
-          <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
-            Water facilities with attention to detail
-          </p>
+          <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.servicesTitle}</p>
         </div>
         <div className="mt-10">
           <ServiceGrid items={services} theme="aqua" />
@@ -117,11 +81,9 @@ export default function BaseyniSpaPageEn() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
-            How We Work
+            {t.howWorkEyebrow}
           </h2>
-          <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
-            Project stages
-          </p>
+          <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.howWorkTitle}</p>
         </div>
         <div className="mt-10">
           <ProcessSteps theme="aqua" lang="en" />
@@ -132,20 +94,14 @@ export default function BaseyniSpaPageEn() {
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-2 lg:items-center lg:px-8">
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
-              Partnership
+              {t.auditEyebrow}
             </h2>
-            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
-              Technical Audit of Water Facilities
-            </p>
-            <p className="mt-4 text-slate">
-              Our team prepares a full, detailed analysis of the facility and
-              an assessment of all systems — filtration, disinfection,
-              circulation, heating, automation and energy efficiency.
-            </p>
+            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.auditTitle}</p>
+            <p className="mt-4 text-slate">{t.auditDescription}</p>
           </div>
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
             <Image
-              src="/images/baseyni-spa/pool-filtration-room.jpg"
+              src={page.auditImage}
               alt="Technical audit of water facilities — filtration installation"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -155,9 +111,36 @@ export default function BaseyniSpaPageEn() {
         </div>
       </section>
 
+      {page.gallery.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+          <div className="max-w-2xl">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
+              {t.galleryEyebrow}
+            </h2>
+            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.galleryTitle}</p>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {page.gallery.map((photo, idx) => (
+              <div
+                key={idx}
+                className="relative aspect-square overflow-hidden rounded-2xl bg-mist"
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt?.en || ""}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <CtaBanner
-        title="Planning a pool or spa area?"
-        description="Contact us for a consultation and an individual quote."
+        title={t.ctaTitle}
+        description={t.ctaDescription}
         ctaLabel="Contact us"
         ctaHref="/en/kontakti"
       />

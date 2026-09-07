@@ -24,6 +24,7 @@ const WHATSAPP_LINK = "https://wa.me/359893472443";
 
 export default async function KontaktiPage() {
   const settings = await readSettings();
+  const t = settings.pages.kontakti.bg;
   const phoneLink = settings.phoneHref;
   const mailLink = `mailto:${settings.email}`;
   const address = settings.address.bg;
@@ -73,9 +74,9 @@ export default async function KontaktiPage() {
     <>
       <PageHero
         theme="navy"
-        eyebrow="Hvac Technology"
-        title="Свържете се с нас"
-        description="Пишете ни за консултация, оглед или оферта — независимо дали въпросът е за климатизация, отопление, басейн или СПА."
+        eyebrow={t.heroEyebrow}
+        title={t.heroTitle}
+        description={t.heroDescription}
       />
 
       <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-8">
@@ -98,17 +99,15 @@ export default async function KontaktiPage() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-3">
-            <h2 className="text-2xl font-bold text-ink">Изпратете запитване</h2>
-            <p className="mt-2 text-slate">
-              Попълнете формата и ще се свържем с вас възможно най-скоро.
-            </p>
+            <h2 className="text-2xl font-bold text-ink">{t.formTitle}</h2>
+            <p className="mt-2 text-slate">{t.formDescription}</p>
             <div className="mt-8">
               <ContactForm email={settings.email} />
             </div>
           </div>
 
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold text-ink">Данни за контакт</h2>
+            <h2 className="text-2xl font-bold text-ink">{t.contactDetailsTitle}</h2>
             <ul className="mt-6 space-y-5">
               {contactItems.map((item) => (
                 <li key={item.label} className="flex items-start gap-3.5">
@@ -134,7 +133,7 @@ export default async function KontaktiPage() {
             </ul>
 
             <h3 className="mt-10 text-sm font-semibold uppercase tracking-widest text-slate">
-              Последвайте ни
+              {t.followUsTitle}
             </h3>
             <ul className="mt-4 space-y-3">
               <li>
@@ -168,11 +167,9 @@ export default async function KontaktiPage() {
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
           <div className="max-w-2xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
-              Локация
+              {t.locationEyebrow}
             </h2>
-            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
-              Намерете ни на картата
-            </p>
+            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.locationTitle}</p>
           </div>
           <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200">
             <iframe

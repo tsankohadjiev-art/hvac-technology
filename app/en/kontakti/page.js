@@ -31,6 +31,7 @@ const WHATSAPP_LINK = "https://wa.me/359893472443";
 
 export default async function KontaktiPageEn() {
   const settings = await readSettings();
+  const t = settings.pages.kontakti.en;
   const phoneLink = settings.phoneHref;
   const mailLink = `mailto:${settings.email}`;
   // Google Maps geocodes Bulgarian street addresses more reliably in Bulgarian.
@@ -80,9 +81,9 @@ export default async function KontaktiPageEn() {
     <>
       <PageHero
         theme="navy"
-        eyebrow="Hvac Technology"
-        title="Get in Touch"
-        description="Write to us for a consultation, site visit or quote — whether your question is about air conditioning, heating, a pool or a spa."
+        eyebrow={t.heroEyebrow}
+        title={t.heroTitle}
+        description={t.heroDescription}
       />
 
       <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-8">
@@ -105,17 +106,15 @@ export default async function KontaktiPageEn() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-3">
-            <h2 className="text-2xl font-bold text-ink">Send an Inquiry</h2>
-            <p className="mt-2 text-slate">
-              Fill out the form and we will get back to you as soon as possible.
-            </p>
+            <h2 className="text-2xl font-bold text-ink">{t.formTitle}</h2>
+            <p className="mt-2 text-slate">{t.formDescription}</p>
             <div className="mt-8">
               <ContactForm lang="en" email={settings.email} />
             </div>
           </div>
 
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold text-ink">Contact Details</h2>
+            <h2 className="text-2xl font-bold text-ink">{t.contactDetailsTitle}</h2>
             <ul className="mt-6 space-y-5">
               {contactItems.map((item) => (
                 <li key={item.label} className="flex items-start gap-3.5">
@@ -141,7 +140,7 @@ export default async function KontaktiPageEn() {
             </ul>
 
             <h3 className="mt-10 text-sm font-semibold uppercase tracking-widest text-slate">
-              Follow Us
+              {t.followUsTitle}
             </h3>
             <ul className="mt-4 space-y-3">
               <li>
@@ -175,11 +174,9 @@ export default async function KontaktiPageEn() {
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
           <div className="max-w-2xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-slate">
-              Location
+              {t.locationEyebrow}
             </h2>
-            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
-              Find Us on the Map
-            </p>
+            <p className="mt-3 text-3xl font-bold tracking-tight text-ink">{t.locationTitle}</p>
           </div>
           <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200">
             <iframe
