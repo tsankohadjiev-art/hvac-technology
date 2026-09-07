@@ -83,10 +83,10 @@ export default function ProductCard({ product, onOpen }) {
         <div className="mt-4 flex items-center justify-between gap-3">
           {hasPrice(product) ? (
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-bold text-ink">{formatPrice(product.price)} лв.</span>
+              <span className="text-lg font-bold text-ink">{formatPrice(product.price)} €</span>
               {discount && (
                 <span className="text-sm text-slate-400 line-through">
-                  {formatPrice(product.oldPrice)} лв.
+                  {formatPrice(product.oldPrice)} €
                 </span>
               )}
             </div>

@@ -99,7 +99,7 @@ export default function CartDrawer() {
                         <span className="text-sm font-bold text-ink">
                           {item.price == null
                             ? "Цена при запитване"
-                            : `${formatPrice(item.price * item.qty)} лв.`}
+                            : `${formatPrice(item.price * item.qty)} €`}
                         </span>
                       </div>
                     </div>
@@ -119,7 +119,7 @@ export default function CartDrawer() {
             <div className="border-t border-slate-200 px-6 py-5">
               <div className="flex items-center justify-between text-sm text-slate">
                 <span>Междинна сума</span>
-                <span className="text-lg font-bold text-ink">{formatPrice(subtotal)} лв.</span>
+                <span className="text-lg font-bold text-ink">{formatPrice(subtotal)} €</span>
               </div>
               <p className="mt-1 text-xs text-slate">
                 {hasUnpricedItems

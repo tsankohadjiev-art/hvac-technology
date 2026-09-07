@@ -219,7 +219,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="text-sm font-medium text-ink">
-              Цена (лв.)
+              Цена (€)
               <input
                 type="number"
                 min="0"
