@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useCart } from "./CartContext";
 import { formatPrice, getDiscountPercent, hasPrice, normalizeSpecs } from "@/lib/products";
 import { resolveIcon } from "@/lib/icons";
-import { XIcon, MinusIcon, PlusIcon, CheckIcon } from "@/components/Icons";
+import { XIcon, MinusIcon, PlusIcon, CheckIcon, ArrowRightIcon } from "@/components/Icons";
 
 const tileGradient = {
   climate: "from-navy via-climate-dark to-climate",
@@ -16,6 +16,8 @@ export default function ProductQuickView({ product, onClose }) {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [hasMoreBelow, setHasMoreBelow] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     if (!product) return;
@@ -25,6 +27,24 @@ export default function ProductQuickView({ product, onClose }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [product, onClose]);
+
+  useEffect(() => {
+    if (!product) return;
+    const el = scrollRef.current;
+    if (!el) return;
+
+    function updateHasMoreBelow() {
+      setHasMoreBelow(el.scrollHeight - el.scrollTop - el.clientHeight > 8);
+    }
+
+    updateHasMoreBelow();
+    el.addEventListener("scroll", updateHasMoreBelow);
+    window.addEventListener("resize", updateHasMoreBelow);
+    return () => {
+      el.removeEventListener("scroll", updateHasMoreBelow);
+      window.removeEventListener("resize", updateHasMoreBelow);
+    };
+  }, [product]);
 
   if (!product) return null;
 
@@ -44,7 +64,10 @@ export default function ProductQuickView({ product, onClose }) {
   return (
     <div className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-6">
       <div className="fixed inset-0 bg-navy-dark/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl animate-slide-up sm:max-w-2xl sm:rounded-3xl">
+      <div
+        ref={scrollRef}
+        className="relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl animate-slide-up sm:max-w-2xl sm:rounded-3xl"
+      >
         <button
           type="button"
           onClick={onClose}
@@ -173,6 +196,12 @@ export default function ProductQuickView({ product, onClose }) {
             </div>
           </div>
         </div>
+
+        {hasMoreBelow && (
+          <div className="pointer-events-none sticky bottom-0 left-0 z-10 flex justify-center bg-gradient-to-t from-white via-white/90 to-transparent pb-1.5 pt-6">
+            <ArrowRightIcon className="h-4 w-4 rotate-90 text-slate-400" />
+          </div>
+        )}
       </div>
     </div>
   );
