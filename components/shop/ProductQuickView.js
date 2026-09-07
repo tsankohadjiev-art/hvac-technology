@@ -104,12 +104,18 @@ export default function ProductQuickView({ product, onClose }) {
                 if (spec.type === "image") {
                   return (
                     <figure key={idx}>
-                      <div className="relative h-56 w-full overflow-hidden rounded-lg bg-mist">
-                        <Image src={spec.src} alt={spec.caption || product.name} fill sizes="100vw" className="object-contain" />
-                      </div>
-                      {spec.caption && (
-                        <figcaption className="mt-1.5 text-xs text-slate">{spec.caption}</figcaption>
-                      )}
+                      <a href={spec.src} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg bg-mist">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={spec.src}
+                          alt={spec.caption || product.name}
+                          className="w-full h-auto"
+                          loading="lazy"
+                        />
+                      </a>
+                      <figcaption className="mt-1.5 text-xs text-slate">
+                        {spec.caption || "Натиснете за пълен размер"}
+                      </figcaption>
                     </figure>
                   );
                 }
