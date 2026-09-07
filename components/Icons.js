@@ -331,3 +331,22 @@ export function LogOutIcon(props) {
     </svg>
   );
 }
+
+export function EyeIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+export function EyeOffIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2 12s3.5-7 10-7c1.7 0 3.2.35 4.5.95M22 12s-3.5 7-10 7c-1.7 0-3.2-.35-4.5-.95" />
+      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+      <path d="M3 3l18 18" />
+    </svg>
+  );
+}

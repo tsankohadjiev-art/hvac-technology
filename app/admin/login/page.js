@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
-import { LockIcon } from "@/components/Icons";
+import { LockIcon, EyeIcon, EyeOffIcon } from "@/components/Icons";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -17,7 +19,8 @@ export default function AdminLoginPage() {
 
     // Четем стойността директно от формата (а не от React state), за да работи
     // коректно и когато паролата е попълнена от автоматично попълване на браузъра.
-    const password = new FormData(e.currentTarget).get("password") || "";
+    // Отрязваме крайни интервали/нов ред — чест проблем при копиране на паролата.
+    const password = (new FormData(e.currentTarget).get("password") || "").trim();
 
     try {
       const res = await fetch("/api/admin/login", {
@@ -56,15 +59,36 @@ export default function AdminLoginPage() {
         <form onSubmit={handleSubmit} className="mt-7 grid gap-4">
           <label className="text-sm font-medium text-ink">
             Парола
-            <input
-              type="password"
-              name="password"
-              autoFocus
-              autoComplete="current-password"
-              className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
-              placeholder="••••••••"
-            />
+            <div className="relative mt-1.5">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                autoFocus
+                autoComplete="current-password"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+                onKeyUp={(e) => setCapsLockOn(e.getModifierState?.("CapsLock") ?? false)}
+                onKeyDown={(e) => setCapsLockOn(e.getModifierState?.("CapsLock") ?? false)}
+                className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 pr-10 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-2.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-slate hover:text-ink"
+                aria-label={showPassword ? "Скрий паролата" : "Покажи паролата"}
+              >
+                {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+              </button>
+            </div>
           </label>
+
+          {capsLockOn && (
+            <p className="text-xs font-medium text-amber-600">
+              Внимание: Caps Lock е включен.
+            </p>
+          )}
 
           {error && <p className="text-sm text-red-600">{error}</p>}
 
