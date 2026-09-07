@@ -2,9 +2,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SetHtmlLang from "@/components/SetHtmlLang";
 
-// Позволява промените от админ панела (Настройки на сайта) да излязат
-// на живо в рамките на минута, без да е нужен нов deploy.
-export const revalidate = 60;
+// Страниците тук четат съдържание от админ панела (Vercel Blob). ISR
+// (revalidate) не засича надеждно новите Blob версии в тази Next.js
+// версия — както при магазина (виж productStore.js/force-dynamic по
+// същата причина), затова рендерираме динамично на всяка заявка, за да
+// промените от "Настройки на сайта" излизат веднага, не до минута по-късно.
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: {
