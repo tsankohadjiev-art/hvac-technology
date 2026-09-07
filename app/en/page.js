@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import CtaBanner from "@/components/CtaBanner";
 import Logo from "@/components/Logo";
+import { readSettings } from "@/lib/settingsStore";
 import {
   ArrowRightIcon,
   SnowflakeIcon,
@@ -63,22 +65,33 @@ const advantages = [
   },
 ];
 
-export default function HomeEn() {
+export default async function HomeEn() {
+  const settings = await readSettings();
+  const hero = settings.hero.en;
+
   return (
     <>
       <section className="relative overflow-hidden bg-gradient-to-br from-navy-dark via-navy to-navy-light text-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+        {settings.heroImage && (
+          <Image
+            src={settings.heroImage}
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover opacity-30"
+          />
+        )}
+        <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
           <Logo className="h-14 w-auto text-white sm:h-16" />
           <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Complete solutions in two directions towards integrated engineering
+            {hero.title}
           </h1>
-          <p className="mt-2 max-w-2xl text-lg text-white/70">
-            (Integrated Building Systems Engineering)
-          </p>
+          {hero.subtitle && (
+            <p className="mt-2 max-w-2xl text-lg text-white/70">{hero.subtitle}</p>
+          )}
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
-            Hvac Technology combines expertise in air conditioning and heating
-            with the construction of pools, spas and water facilities —
-            quality and reliability under one name.
+            {hero.description}
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link

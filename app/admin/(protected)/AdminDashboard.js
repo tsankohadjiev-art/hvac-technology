@@ -6,8 +6,10 @@ import { ZONES, formatPrice, getDiscountPercent } from "@/lib/products";
 import { resolveIcon } from "@/lib/icons";
 import { PlusIcon, PencilIcon, TrashIcon, SearchIcon, XIcon } from "@/components/Icons";
 import ProductForm from "./ProductForm";
+import SettingsForm from "./SettingsForm";
 
-export default function AdminDashboard({ initialProducts }) {
+export default function AdminDashboard({ initialProducts, initialSettings }) {
+  const [tab, setTab] = useState("products"); // "products" | "settings"
   const [products, setProducts] = useState(initialProducts);
   const [query, setQuery] = useState("");
   const [zoneFilter, setZoneFilter] = useState("all");
@@ -67,6 +69,32 @@ export default function AdminDashboard({ initialProducts }) {
   }
 
   return (
+    <div>
+      <div className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl gap-1 px-6">
+          {[
+            { key: "products", label: "Продукти" },
+            { key: "settings", label: "Настройки на сайта" },
+          ].map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => setTab(t.key)}
+              className={`border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${
+                tab === t.key
+                  ? "border-navy text-ink"
+                  : "border-transparent text-slate hover:text-ink"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {tab === "settings" && <SettingsForm initialSettings={initialSettings} />}
+
+      {tab === "products" && (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -244,6 +272,8 @@ export default function AdminDashboard({ initialProducts }) {
             </div>
           </div>
         </div>
+      )}
+    </div>
       )}
     </div>
   );

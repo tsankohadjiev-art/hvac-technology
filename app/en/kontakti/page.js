@@ -1,5 +1,6 @@
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
+import { readSettings } from "@/lib/settingsStore";
 import {
   PhoneIcon,
   MailIcon,
@@ -27,58 +28,54 @@ const FACEBOOK_CLIMATE = "https://www.facebook.com/hvac.technology.bulgaria/";
 const FACEBOOK_POOL = "https://www.facebook.com/profile.php?id=61590323918867";
 const VIBER_LINK = "viber://chat?number=%2B359893472443";
 const WHATSAPP_LINK = "https://wa.me/359893472443";
-const PHONE_LINK = "tel:+359893472443";
-const MAIL_LINK = "mailto:office@hvactechnology.eu";
-const MAP_QUERY = "Sofia, Vitosha, Andrey Badev St. 1, Bulgaria";
-// Google Maps geocodes Bulgarian street addresses more reliably in Bulgarian.
-const MAP_GEOCODE_QUERY = "гр. София, кв. Витоша, ул. Андрей Бадев 1";
-const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
-  MAP_GEOCODE_QUERY
-)}&z=15&output=embed`;
-const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  MAP_GEOCODE_QUERY
-)}`;
 
-const contactItems = [
-  { icon: UsersIcon, label: "Eng. Ts. Hadzhiev", href: null },
-  { icon: PhoneIcon, label: "+359 89 347 2443", href: PHONE_LINK },
-  {
-    icon: MailIcon,
-    label: "office@hvactechnology.eu",
-    href: MAIL_LINK,
-  },
-  { icon: MapPinIcon, label: "Sofia, Vitosha, Andrey Badev St. 1, Bulgaria", href: MAP_LINK },
-];
+export default async function KontaktiPageEn() {
+  const settings = await readSettings();
+  const phoneLink = settings.phoneHref;
+  const mailLink = `mailto:${settings.email}`;
+  // Google Maps geocodes Bulgarian street addresses more reliably in Bulgarian.
+  const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
+    settings.address.bg
+  )}&z=15&output=embed`;
+  const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    settings.address.bg
+  )}`;
 
-const quickContacts = [
-  {
-    icon: PhoneIcon,
-    label: "Call us",
-    href: PHONE_LINK,
-    className: "hover:border-climate hover:text-climate-dark",
-  },
-  {
-    icon: ViberIcon,
-    label: "Viber",
-    href: VIBER_LINK,
-    className: "hover:border-[#7360F2] hover:text-[#7360F2]",
-  },
-  {
-    icon: WhatsAppIcon,
-    label: "WhatsApp",
-    href: WHATSAPP_LINK,
-    className: "hover:border-[#25D366] hover:text-[#1DA851]",
-    external: true,
-  },
-  {
-    icon: MailIcon,
-    label: "Email",
-    href: MAIL_LINK,
-    className: "hover:border-climate hover:text-climate-dark",
-  },
-];
+  const contactItems = [
+    { icon: UsersIcon, label: "Eng. Ts. Hadzhiev", href: null },
+    { icon: PhoneIcon, label: settings.phone, href: phoneLink },
+    { icon: MailIcon, label: settings.email, href: mailLink },
+    { icon: MapPinIcon, label: settings.address.en, href: mapLink },
+  ];
 
-export default function KontaktiPageEn() {
+  const quickContacts = [
+    {
+      icon: PhoneIcon,
+      label: "Call us",
+      href: phoneLink,
+      className: "hover:border-climate hover:text-climate-dark",
+    },
+    {
+      icon: ViberIcon,
+      label: "Viber",
+      href: VIBER_LINK,
+      className: "hover:border-[#7360F2] hover:text-[#7360F2]",
+    },
+    {
+      icon: WhatsAppIcon,
+      label: "WhatsApp",
+      href: WHATSAPP_LINK,
+      className: "hover:border-[#25D366] hover:text-[#1DA851]",
+      external: true,
+    },
+    {
+      icon: MailIcon,
+      label: "Email",
+      href: mailLink,
+      className: "hover:border-climate hover:text-climate-dark",
+    },
+  ];
+
   return (
     <>
       <PageHero
@@ -113,7 +110,7 @@ export default function KontaktiPageEn() {
               Fill out the form and we will get back to you as soon as possible.
             </p>
             <div className="mt-8">
-              <ContactForm lang="en" />
+              <ContactForm lang="en" email={settings.email} />
             </div>
           </div>
 
@@ -187,7 +184,7 @@ export default function KontaktiPageEn() {
           <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200">
             <iframe
               title="Hvac Technology — location"
-              src={MAP_EMBED_SRC}
+              src={mapEmbedSrc}
               width="100%"
               height="420"
               loading="lazy"

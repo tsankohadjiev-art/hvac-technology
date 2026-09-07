@@ -6,9 +6,7 @@ import { useCart } from "./CartContext";
 import { formatPrice } from "@/lib/products";
 import { CheckIcon, ArrowRightIcon, MailIcon, ClipboardIcon } from "@/components/Icons";
 
-const CONTACT_EMAIL = "office@hvactechnology.eu";
-
-export default function CheckoutForm() {
+export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu" }) {
   const { items, subtotal, hasUnpricedItems, clear } = useCart();
   const [orderReady, setOrderReady] = useState(null); // { mailtoHref, plainText }
   const [sent, setSent] = useState(false);
@@ -59,7 +57,7 @@ export default function CheckoutForm() {
       .filter(Boolean)
       .join("\n");
 
-    const mailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+    const mailtoHref = `mailto:${contactEmail}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(plainText)}`;
 
@@ -74,7 +72,7 @@ export default function CheckoutForm() {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(
-        `До: ${CONTACT_EMAIL}\n\n${orderReady.plainText}`
+        `До: ${contactEmail}\n\n${orderReady.plainText}`
       );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -109,7 +107,7 @@ export default function CheckoutForm() {
         <p className="mt-3 text-slate">
           Ако имейл клиентът ви се отвори, само натиснете изпращане в него. Ако не се отвори
           нищо, използвайте бутона за копиране на предишната стъпка и изпратете съобщението
-          ръчно до {CONTACT_EMAIL} от вашата поща.
+          ръчно до {contactEmail} от вашата поща.
         </p>
         <Link
           href="/magazin"
@@ -131,7 +129,7 @@ export default function CheckoutForm() {
         <h1 className="mt-5 text-2xl font-bold text-ink">Запитването е готово за изпращане</h1>
         <p className="mt-3 text-slate">
           Натиснете бутона, за да се отвори имейл клиентът ви с попълнено съобщение до{" "}
-          <span className="font-semibold text-ink">{CONTACT_EMAIL}</span>.
+          <span className="font-semibold text-ink">{contactEmail}</span>.
         </p>
 
         <a
@@ -149,7 +147,7 @@ export default function CheckoutForm() {
           </p>
           <p className="mt-1.5 text-sm text-slate">
             Копирайте текста на запитването и го изпратете ръчно от вашата поща (Gmail, Abv,
-            и др.) до <span className="font-medium text-ink">{CONTACT_EMAIL}</span>.
+            и др.) до <span className="font-medium text-ink">{contactEmail}</span>.
           </p>
           <button
             type="button"

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-const CONTACT_EMAIL = "office@hvactechnology.eu";
-
 const TEXT = {
   bg: {
     directionOptions: [
@@ -49,7 +47,7 @@ const TEXT = {
   },
 };
 
-export default function ContactForm({ lang = "bg" }) {
+export default function ContactForm({ lang = "bg", email = "office@hvactechnology.eu" }) {
   const t = TEXT[lang];
   const [form, setForm] = useState({
     name: "",
@@ -79,7 +77,7 @@ export default function ContactForm({ lang = "bg" }) {
       form.message,
     ].join("\n");
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
   }
