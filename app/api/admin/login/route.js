@@ -9,8 +9,8 @@ export async function POST(request) {
     return NextResponse.json({ error: "Невалидна заявка." }, { status: 400 });
   }
 
-  const password = body?.password || "";
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const password = (body?.password || "").trim();
+  const adminPassword = (process.env.ADMIN_PASSWORD || "").trim();
 
   if (!adminPassword || password !== adminPassword) {
     return NextResponse.json({ error: "Грешна парола." }, { status: 401 });
