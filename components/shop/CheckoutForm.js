@@ -8,8 +8,10 @@ import { CheckIcon, ArrowRightIcon, MailIcon, ClipboardIcon } from "@/components
 
 export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu" }) {
   const { items, subtotal, hasUnpricedItems, clear } = useCart();
-  const [orderReady, setOrderReady] = useState(null); // { mailtoHref, plainText }
+  const [orderReady, setOrderReady] = useState(null); // { mailtoHref, plainText } — само при провал на автоматичното изпращане
   const [sent, setSent] = useState(false);
+  const [sentVia, setSentVia] = useState(null); // "api" | "mailto"
+  const [sending, setSending] = useState(false);
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -25,11 +27,8 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  function buildPlainText() {
     const deliveryLabel = form.delivery === "office" ? "Вземане от офиса" : "Доставка на адрес";
-
     const itemLines = items
       .map(
         (i) =>
@@ -39,8 +38,7 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
       )
       .join("\n");
 
-    const subject = `Поръчка от онлайн магазина — ${form.name}`;
-    const plainText = [
+    return [
       `Име: ${form.name}`,
       `Телефон: ${form.phone}`,
       `Имейл: ${form.email}`,
@@ -56,15 +54,42 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
     ]
       .filter(Boolean)
       .join("\n");
+  }
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setSending(true);
+
+    try {
+      const res = await fetch("/api/shop/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ form, items, subtotal }),
+      });
+
+      if (res.ok) {
+        setSentVia("api");
+        setSent(true);
+        clear();
+        return;
+      }
+    } catch {
+      // мрежова грешка — падаме към mailto резервния вариант по-долу
+    } finally {
+      setSending(false);
+    }
+
+    // Автоматичното изпращане не е достъпно — резервен вариант през mailto.
+    const plainText = buildPlainText();
+    const subject = `Поръчка от онлайн магазина — ${form.name}`;
     const mailtoHref = `mailto:${contactEmail}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(plainText)}`;
-
     setOrderReady({ mailtoHref, plainText });
   }
 
   function handleSendClick() {
+    setSentVia("mailto");
     setSent(true);
     clear();
   }
@@ -105,9 +130,15 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
         </div>
         <h1 className="mt-5 text-2xl font-bold text-ink">Готово</h1>
         <p className="mt-3 text-slate">
-          Ако имейл клиентът ви се отвори, само натиснете изпращане в него. Ако не се отвори
-          нищо, използвайте бутона за копиране на предишната стъпка и изпратете съобщението
-          ръчно до {contactEmail} от вашата поща.
+          {sentVia === "api" ? (
+            <>Поръчката ви е изпратена успешно. Ще се свържем с вас скоро за потвърждение.</>
+          ) : (
+            <>
+              Ако имейл клиентът ви се отвори, само натиснете изпращане в него. Ако не се отвори
+              нищо, използвайте бутона за копиране на предишната стъпка и изпратете съобщението
+              ръчно до {contactEmail} от вашата поща.
+            </>
+          )}
         </p>
         <Link
           href="/magazin"
@@ -126,7 +157,7 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-climate/10 text-climate-dark">
           <MailIcon className="h-7 w-7" />
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-ink">Запитването е готово за изпращане</h1>
+        <h1 className="mt-5 text-2xl font-bold text-ink">Не успяхме да изпратим автоматично</h1>
         <p className="mt-3 text-slate">
           Натиснете бутона, за да се отвори имейл клиентът ви с попълнено съобщение до{" "}
           <span className="font-semibold text-ink">{contactEmail}</span>.
@@ -296,9 +327,10 @@ export default function CheckoutForm({ contactEmail = "office@hvactechnology.eu"
 
           <button
             type="submit"
-            className="mt-2 w-full rounded-full bg-navy px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light sm:w-auto"
+            disabled={sending}
+            className="mt-2 w-full rounded-full bg-navy px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            Продължи към изпращане
+            {sending ? "Изпращане..." : "Продължи към изпращане"}
           </button>
         </form>
 
