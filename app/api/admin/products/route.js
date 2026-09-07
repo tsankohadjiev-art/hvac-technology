@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { readProducts, upsertProduct, generateId } from "@/lib/productStore";
+import { normalizeSpecs } from "@/lib/products";
 
 function normalize(body) {
   const priceNum = body.price === "" || body.price == null ? null : Number(body.price);
@@ -10,7 +11,7 @@ function normalize(body) {
     category: (body.category || "").trim() || "Общи",
     name: (body.name || "").trim(),
     description: (body.description || "").trim(),
-    specs: Array.isArray(body.specs) ? body.specs.map((s) => String(s).trim()).filter(Boolean) : [],
+    specs: normalizeSpecs(body.specs),
     price: Number.isFinite(priceNum) ? priceNum : null,
     oldPrice: Number.isFinite(oldPriceNum) ? oldPriceNum : null,
     image: body.image || null,
