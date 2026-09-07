@@ -67,7 +67,7 @@ export default function ShopCatalog({
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/80">{description}</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <div className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3">
-              <div className="text-2xl font-bold">0 лв.</div>
+              <div className="text-2xl font-bold">0 €</div>
               <div className="text-xs text-white/70">онлайн плащане</div>
             </div>
           </div>

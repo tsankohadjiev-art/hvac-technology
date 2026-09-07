@@ -36,7 +36,7 @@ export default function CheckoutForm() {
       .map(
         (i) =>
           `- ${i.name} x${i.qty} — ${
-            i.price == null ? "цена при запитване" : `${formatPrice(i.price * i.qty)} лв.`
+            i.price == null ? "цена при запитване" : `${formatPrice(i.price * i.qty)} €`
           }`
       )
       .join("\n");
@@ -52,7 +52,7 @@ export default function CheckoutForm() {
       "Продукти:",
       itemLines,
       "",
-      `Междинна сума: ${formatPrice(subtotal)} лв.`,
+      `Междинна сума: ${formatPrice(subtotal)} €`,
       "",
       form.note ? `Бележка: ${form.note}` : null,
     ]
@@ -318,14 +318,14 @@ export default function CheckoutForm() {
                   <span className="font-semibold text-ink">
                     {item.price == null
                       ? "Цена при запитване"
-                      : `${formatPrice(item.price * item.qty)} лв.`}
+                      : `${formatPrice(item.price * item.qty)} €`}
                   </span>
                 </li>
               ))}
             </ul>
             <div className="mt-5 flex items-center justify-between border-t border-slate-200 pt-4">
               <span className="text-sm font-semibold text-ink">Общо</span>
-              <span className="text-xl font-bold text-ink">{formatPrice(subtotal)} лв.</span>
+              <span className="text-xl font-bold text-ink">{formatPrice(subtotal)} €</span>
             </div>
             {hasUnpricedItems && (
               <p className="mt-2 text-xs text-slate">

@@ -85,10 +85,10 @@ export default function ProductQuickView({ product, onClose }) {
           <div className="mt-7 flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
             {hasPrice(product) ? (
               <div className="flex items-baseline gap-2.5">
-                <span className="text-2xl font-bold text-ink">{formatPrice(product.price)} лв.</span>
+                <span className="text-2xl font-bold text-ink">{formatPrice(product.price)} €</span>
                 {discount && (
                   <span className="text-base text-slate-400 line-through">
-                    {formatPrice(product.oldPrice)} лв.
+                    {formatPrice(product.oldPrice)} €
                   </span>
                 )}
               </div>

@@ -149,11 +149,11 @@ export default function AdminDashboard({ initialProducts }) {
                     {product.price == null ? (
                       <span className="text-slate-400">Предстои</span>
                     ) : (
-                      <span className="font-semibold text-ink">{formatPrice(product.price)} лв.</span>
+                      <span className="font-semibold text-ink">{formatPrice(product.price)} €</span>
                     )}
                     {discount && (
                       <span className="ml-2 text-xs text-slate-400 line-through">
-                        {formatPrice(product.oldPrice)} лв.
+                        {formatPrice(product.oldPrice)} €
                       </span>
                     )}
                   </td>
