@@ -1,29 +1,18 @@
 import { NextResponse } from "next/server";
 import { readSettings, writeSettings } from "@/lib/settingsStore";
 
-function normalize(body) {
-  return {
-    phone: String(body.phone ?? "").trim(),
-    phoneHref: String(body.phoneHref ?? "").trim(),
-    email: String(body.email ?? "").trim(),
-    address: {
-      bg: String(body.address?.bg ?? "").trim(),
-      en: String(body.address?.en ?? "").trim(),
-    },
-    hero: {
-      bg: {
-        title: String(body.hero?.bg?.title ?? "").trim(),
-        subtitle: String(body.hero?.bg?.subtitle ?? "").trim(),
-        description: String(body.hero?.bg?.description ?? "").trim(),
-      },
-      en: {
-        title: String(body.hero?.en?.title ?? "").trim(),
-        subtitle: String(body.hero?.en?.subtitle ?? "").trim(),
-        description: String(body.hero?.en?.description ?? "").trim(),
-      },
-    },
-    heroImage: body.heroImage || null,
-  };
+// Пресича низовете рекурсивно; масивите/обектите се обхождат, но формата
+// (кои полета съществуват) се налага от mergeWithDefaults в settingsStore,
+// така че тук не се налага да изброяваме всяко поле ръчно.
+function trimDeep(value) {
+  if (typeof value === "string") return value.trim();
+  if (Array.isArray(value)) return value.map(trimDeep);
+  if (value != null && typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = trimDeep(v);
+    return out;
+  }
+  return value;
 }
 
 export async function GET() {
@@ -38,11 +27,15 @@ export async function PATCH(request) {
     return NextResponse.json({ error: "Невалидна заявка." }, { status: 400 });
   }
 
-  const normalized = normalize(body);
-  if (!normalized.phone || !normalized.email) {
+  if (typeof body !== "object" || body === null) {
+    return NextResponse.json({ error: "Невалидна заявка." }, { status: 400 });
+  }
+
+  const cleaned = trimDeep(body);
+  if (!cleaned.phone || !cleaned.email) {
     return NextResponse.json({ error: "Телефонът и имейлът са задължителни." }, { status: 400 });
   }
 
-  const updated = await writeSettings(normalized);
+  const updated = await writeSettings(cleaned);
   return NextResponse.json(updated);
 }
