@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
 import { LockIcon, EyeIcon, EyeOffIcon } from "@/components/Icons";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,8 +28,11 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push("/admin");
-        router.refresh();
+        // Пълно (не клиентско/soft) навигиране към /admin — гарантира, че
+        // браузърът прави истинска заявка към сървъра с вече записаната
+        // бисквитка, вместо да презареди евентуално кеширана "неавторизирана"
+        // версия на страницата от клиентския router cache.
+        window.location.href = "/admin";
         return;
       }
 
