@@ -4,6 +4,10 @@ import { formatPrice } from "@/lib/products";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Hvac Technology <onboarding@resend.dev>";
+// Незадължителен адрес за поръчки, различен от публично показвания контактен
+// имейл на сайта — полезно, докато домейнът не е потвърден в Resend (в тестов
+// режим Resend изпраща само до имейла на собствения акаунт).
+const ORDER_NOTIFICATION_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL;
 
 function buildOrderText({ form, items, subtotal }) {
   const deliveryLabel = form.delivery === "office" ? "Вземане от офиса" : "Доставка на адрес";
@@ -56,6 +60,7 @@ export async function POST(request) {
 
   const settings = await readSettings();
   const text = buildOrderText({ form, items, subtotal });
+  const to = ORDER_NOTIFICATION_EMAIL || settings.email;
 
   try {
     const res = await fetch("https://api.resend.com/emails", {
@@ -66,7 +71,7 @@ export async function POST(request) {
       },
       body: JSON.stringify({
         from: RESEND_FROM_EMAIL,
-        to: [settings.email],
+        to: [to],
         reply_to: form.email,
         subject: `Поръчка от онлайн магазина — ${form.name}`,
         text,
