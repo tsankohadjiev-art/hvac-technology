@@ -55,7 +55,11 @@ export default function ProductQuickView({ product, onClose }) {
         </button>
 
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className={`relative flex h-56 items-center justify-center overflow-hidden bg-gradient-to-br sm:h-64 ${tileGradient[product.zone]}`}>
+          <div
+            className={`relative flex h-56 items-center justify-center overflow-hidden sm:h-64 ${
+              product.image ? "bg-white" : `bg-gradient-to-br ${tileGradient[product.zone]}`
+            }`}
+          >
             {product.image ? (
               <Image src={product.image} alt={product.name} fill sizes="100vw" className="object-contain p-3" />
             ) : (
