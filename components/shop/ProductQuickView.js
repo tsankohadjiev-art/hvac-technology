@@ -85,25 +85,43 @@ export default function ProductQuickView({ product, onClose }) {
               {specs.map((spec, idx) => {
                 if (spec.type === "table") {
                   return (
-                    <div key={idx} className="overflow-x-auto rounded-lg border border-slate-200">
-                      <table className="w-full border-collapse text-sm">
-                        <tbody>
-                          {spec.rows.map((row, rowIdx) => (
-                            <tr key={rowIdx} className={rowIdx === 0 ? "bg-mist" : ""}>
-                              {row.map((cell, cellIdx) => (
-                                <td
-                                  key={cellIdx}
-                                  className={`border border-slate-200 px-3 py-2 text-ink ${
-                                    rowIdx === 0 ? "font-semibold" : ""
-                                  }`}
-                                >
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div key={idx} className="overflow-hidden rounded-lg border border-slate-200">
+                      {spec.title && (
+                        <div className="bg-navy px-3 py-2 text-sm font-semibold text-white">
+                          {spec.title}
+                        </div>
+                      )}
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse text-sm">
+                          <tbody>
+                            {spec.rows.map((row, rowIdx) => (
+                              <tr
+                                key={rowIdx}
+                                className={
+                                  rowIdx === 0 ? "bg-mist" : rowIdx % 2 === 0 ? "bg-slate-50" : ""
+                                }
+                              >
+                                {row.map((cell, cellIdx) => (
+                                  <td
+                                    key={cellIdx}
+                                    className={`border border-slate-200 px-3 py-2 text-ink ${
+                                      rowIdx === 0 ? "font-semibold" : ""
+                                    }`}
+                                  >
+                                    {rowIdx > 0 && /^A\+{1,3}$/.test(cell) ? (
+                                      <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                                        {cell}
+                                      </span>
+                                    ) : (
+                                      cell
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   );
                 }
