@@ -26,7 +26,7 @@ function toEditableSpec(item) {
   if (typeof item === "string") return { type: "text", value: item };
   if (item?.type === "image") return { type: "image", src: item.src || "", caption: item.caption || "" };
   if (item?.type === "table") {
-    return { type: "table", title: item.title || "", rows: (item.rows || []).map((row) => [...row]) };
+    return { type: "table", rows: (item.rows || []).map((row) => [...row]) };
   }
   return { type: "text", value: item?.value || "" };
 }
@@ -77,7 +77,6 @@ export default function ProductForm({ product, onClose, onSaved }) {
     updateSpecs((specs) =>
       specs.push({
         type: "table",
-        title: "",
         rows: [
           ["", ""],
           ["", ""],
@@ -103,12 +102,6 @@ export default function ProductForm({ product, onClose, onSaved }) {
   function updateImageCaption(index, caption) {
     updateSpecs((specs) => {
       specs[index] = { ...specs[index], caption };
-    });
-  }
-
-  function updateTableTitle(index, title) {
-    updateSpecs((specs) => {
-      specs[index] = { ...specs[index], title };
     });
   }
 
@@ -330,16 +323,6 @@ export default function ProductForm({ product, onClose, onSaved }) {
                           <XIcon className="h-4 w-4" />
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        value={spec.title}
-                        onChange={(e) => updateTableTitle(idx, e.target.value)}
-                        placeholder="Заглавие на таблицата (незадължително), напр. Технически спецификации"
-                        className="mb-2 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
-                      />
-                      <p className="mb-2 text-xs text-slate-400">
-                        Първият ред от таблицата се показва удебелен като заглавен ред — въведете там имената на колоните (напр. „Параметър“ / „Стойност“).
-                      </p>
                       <div className="overflow-x-auto">
                         <table className="border-collapse">
                           <tbody>
