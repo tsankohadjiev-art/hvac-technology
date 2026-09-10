@@ -57,7 +57,7 @@ export default function ProductQuickView({ product, onClose }) {
         <div className="min-h-0 flex-1 overflow-y-auto">
           <div
             className={`relative flex h-56 items-center justify-center overflow-hidden sm:h-64 ${
-              product.image ? "bg-white" : `bg-gradient-to-br ${tileGradient[product.zone]}`
+              product.image ? "bg-mist" : `bg-gradient-to-br ${tileGradient[product.zone]}`
             }`}
           >
             {product.image ? (
