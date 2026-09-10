@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCart } from "./CartContext";
 import { formatPrice, getDiscountPercent, hasPrice, normalizeSpecs } from "@/lib/products";
 import { resolveIcon } from "@/lib/icons";
-import { XIcon, MinusIcon, PlusIcon, CheckIcon } from "@/components/Icons";
+import { XIcon, MinusIcon, PlusIcon, CheckIcon, SearchIcon } from "@/components/Icons";
 
 const tileGradient = {
   climate: "from-navy via-climate-dark to-climate",
@@ -16,15 +16,19 @@ export default function ProductQuickView({ product, onClose }) {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [lightboxSrc, setLightboxSrc] = useState(null);
 
   useEffect(() => {
     if (!product) return;
     function handleKeyDown(e) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (lightboxSrc) setLightboxSrc(null);
+        else onClose();
+      }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [product, onClose]);
+  }, [product, onClose, lightboxSrc]);
 
   if (!product) return null;
 
@@ -85,40 +89,65 @@ export default function ProductQuickView({ product, onClose }) {
               {specs.map((spec, idx) => {
                 if (spec.type === "table") {
                   return (
-                    <div key={idx} className="overflow-x-auto rounded-lg border border-slate-200">
-                      <table className="w-full border-collapse text-sm">
-                        <tbody>
-                          {spec.rows.map((row, rowIdx) => (
-                            <tr key={rowIdx} className={rowIdx === 0 ? "bg-mist" : ""}>
-                              {row.map((cell, cellIdx) => (
-                                <td
-                                  key={cellIdx}
-                                  className={`border border-slate-200 px-3 py-2 text-ink ${
-                                    rowIdx === 0 ? "font-semibold" : ""
-                                  }`}
-                                >
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div key={idx} className="overflow-hidden rounded-lg border border-slate-200">
+                      {spec.title && (
+                        <div className="bg-navy px-3 py-2 text-sm font-semibold text-white">
+                          {spec.title}
+                        </div>
+                      )}
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse text-sm">
+                          <tbody>
+                            {spec.rows.map((row, rowIdx) => (
+                              <tr
+                                key={rowIdx}
+                                className={
+                                  rowIdx === 0 ? "bg-mist" : rowIdx % 2 === 0 ? "bg-slate-50" : ""
+                                }
+                              >
+                                {row.map((cell, cellIdx) => (
+                                  <td
+                                    key={cellIdx}
+                                    className={`border border-slate-200 px-3 py-2 text-ink ${
+                                      rowIdx === 0 ? "font-semibold" : ""
+                                    }`}
+                                  >
+                                    {rowIdx > 0 && /^A\+{1,3}$/.test(cell) ? (
+                                      <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                                        {cell}
+                                      </span>
+                                    ) : (
+                                      cell
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   );
                 }
                 if (spec.type === "image") {
                   return (
                     <figure key={idx}>
-                      <a href={spec.src} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg bg-mist">
+                      <button
+                        type="button"
+                        onClick={() => setLightboxSrc(spec.src)}
+                        className="group relative block w-full overflow-hidden rounded-lg border border-slate-200 bg-mist shadow-sm"
+                      >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={spec.src}
                           alt={spec.caption || product.name}
-                          className="w-full h-auto"
+                          className="h-auto w-full"
                           loading="lazy"
                         />
-                      </a>
+                        <span className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-ink shadow-sm transition-opacity group-hover:opacity-100 sm:opacity-0">
+                          <SearchIcon className="h-4 w-4" />
+                        </span>
+                      </button>
                       <figcaption className="mt-1.5 text-xs text-slate">
                         {spec.caption || "Натиснете за пълен размер"}
                       </figcaption>
@@ -188,6 +217,29 @@ export default function ProductQuickView({ product, onClose }) {
           </div>
         </div>
       </div>
+
+      {lightboxSrc && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-dark/80 p-4"
+          onClick={() => setLightboxSrc(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxSrc(null)}
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-ink shadow-sm hover:bg-white"
+            aria-label="Затвори"
+          >
+            <XIcon className="h-5 w-5" />
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lightboxSrc}
+            alt=""
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
+          />
+        </div>
+      )}
     </div>
   );
 }
