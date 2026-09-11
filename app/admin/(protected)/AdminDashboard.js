@@ -223,6 +223,7 @@ export default function AdminDashboard({ initialProducts, initialSettings }) {
       {formTarget && (
         <ProductForm
           product={formTarget === "new" ? null : formTarget}
+          initialZone={zoneFilter !== "all" ? zoneFilter : "climate"}
           onClose={() => setFormTarget(null)}
           onSaved={handleSaved}
         />
