@@ -31,7 +31,7 @@ function toEditableSpec(item) {
   return { type: "text", value: item?.value || "" };
 }
 
-export default function ProductForm({ product, onClose, onSaved }) {
+export default function ProductForm({ product, initialZone, onClose, onSaved }) {
   const isNew = !product;
   const [form, setForm] = useState(() =>
     product
@@ -42,7 +42,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
           oldPrice: product.oldPrice ?? "",
           badge: product.badge ?? "",
         }
-      : { ...EMPTY_PRODUCT }
+      : { ...EMPTY_PRODUCT, zone: initialZone || EMPTY_PRODUCT.zone }
   );
   const [uploading, setUploading] = useState(false);
   const [uploadingSpecIndex, setUploadingSpecIndex] = useState(null);
