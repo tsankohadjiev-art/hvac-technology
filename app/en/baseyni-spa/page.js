@@ -37,19 +37,24 @@ export default async function BaseyniSpaPageEn() {
         title={t.heroTitle}
         description={t.heroDescription}
         logo={
-          <span className="flex items-center gap-2.5">
-            <Image
-              src="/icon-blue.png"
-              alt=""
-              width={38}
-              height={38}
-              priority
-              className="h-9 w-9"
-            />
-            <span className="text-xl font-extrabold tracking-tight text-white">
-              H TECHNOLOGY
+          <div className="flex flex-col gap-1.5">
+            <span className="flex items-center gap-2.5">
+              <Image
+                src="/icon-blue.png"
+                alt=""
+                width={38}
+                height={38}
+                priority
+                className="h-9 w-9"
+              />
+              <span className="text-xl font-extrabold tracking-tight text-white">
+                H TECHNOLOGY
+              </span>
             </span>
-          </span>
+            <span className="pl-12 text-[11px] font-medium uppercase tracking-wide text-white/70">
+              Hydro. Health. Harmony.
+            </span>
+          </div>
         }
       />
 

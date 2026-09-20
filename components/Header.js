@@ -92,11 +92,8 @@ export default function Header({ lang = "bg" }) {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-        <Link href={homeHref} className="flex flex-col" onClick={() => setOpen(false)}>
+        <Link href={homeHref} className="flex items-center" onClick={() => setOpen(false)}>
           <Logo className="h-10 w-auto text-climate sm:h-11" />
-          <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-slate sm:text-[11px]">
-            Hydro. Health. Harmony.
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
