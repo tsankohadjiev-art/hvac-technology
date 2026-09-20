@@ -14,7 +14,7 @@ export default async function PoolShopPage() {
       products={products}
       initialZone="pool"
       title="Басейни и СПА — продукти"
-      description="Филтрация, дезинфекция, отопление и уелнес оборудване за басейн, СПА и градина."
+      description="Филтрация, дезинфекция, отопление и уелнес оборудване за басейн и СПА."
       heroTheme="aqua"
     />
   );
