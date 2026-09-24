@@ -2,15 +2,18 @@
 
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial } from "@react-three/drei";
+import { Float, MeshDistortMaterial, Sparkles, Stars } from "@react-three/drei";
 
 function CoreBlob() {
   const meshRef = useRef(null);
 
   useFrame((state, delta) => {
     if (!meshRef.current) return;
+    const t = state.clock.elapsedTime;
     meshRef.current.rotation.x += delta * 0.15;
     meshRef.current.rotation.y += delta * 0.2;
+    const breathe = 1 + Math.sin(t * 0.6) * 0.05;
+    meshRef.current.scale.setScalar(breathe);
   });
 
   return (
@@ -40,7 +43,13 @@ function OrbitingShape({ position, color, geometry, speed = 1 }) {
     <Float speed={2 * speed} rotationIntensity={0.6} floatIntensity={1.4}>
       <mesh ref={meshRef} position={position}>
         {geometry}
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.4} />
+        <meshStandardMaterial
+          color={color}
+          roughness={0.25}
+          metalness={0.5}
+          emissive={color}
+          emissiveIntensity={0.35}
+        />
       </mesh>
     </Float>
   );
@@ -71,9 +80,12 @@ export default function Hero3DScene() {
       <pointLight position={[-4, -2, -3]} intensity={40} color="#22d3ee" />
       <directionalLight position={[0, 5, 5]} intensity={0.8} />
 
+      <Stars radius={12} depth={20} count={900} factor={1.6} saturation={0} fade speed={0.6} />
+
       <Suspense fallback={null}>
         <PointerRig>
           <CoreBlob />
+          <Sparkles count={40} scale={4.2} size={2.5} speed={0.4} color="#e9d5ff" opacity={0.7} />
           <OrbitingShape
             position={[-2.6, 1.1, -0.5]}
             color="#f472b6"
