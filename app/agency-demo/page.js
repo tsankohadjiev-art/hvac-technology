@@ -1,5 +1,7 @@
 import Link from "next/link";
 import AgencyCta from "@/components/agency/AgencyCta";
+import Hero3D from "@/components/agency/Hero3D";
+import TiltCard from "@/components/agency/TiltCard";
 import {
   ArrowRightIcon,
   TargetIcon,
@@ -93,31 +95,40 @@ export default function AgencyHome() {
           aria-hidden
           className="absolute -right-32 top-40 h-80 w-80 rounded-full bg-fuchsia-600/20 blur-3xl"
         />
-        <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-300">
-            Дигитално студио · Демо сайт
-          </span>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Изграждаме дигитални продукти, които открояват бизнеса ви
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
-            Стратегия, дизайн и разработка на едно място — помагаме на амбициозни компании да
-            превърнат идеите си в продукти, на които потребителите се доверяват.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/agency-demo/kontakti"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-opacity hover:opacity-90"
-            >
-              Заявете оферта
-              <ArrowRightIcon className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/agency-demo/proekti"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/5"
-            >
-              Разгледайте проектите
-            </Link>
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-36">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-300">
+              Дигитално студио · Демо сайт
+            </span>
+            <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              Изграждаме дигитални продукти, които открояват бизнеса ви
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
+              Стратегия, дизайн и разработка на едно място — помагаме на амбициозни компании да
+              превърнат идеите си в продукти, на които потребителите се доверяват.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href="/agency-demo/kontakti"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-opacity hover:opacity-90"
+              >
+                Заявете оферта
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/agency-demo/proekti"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/5"
+              >
+                Разгледайте проектите
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-3 lg:items-end">
+            <Hero3D />
+            <p className="text-center text-xs text-slate-500 lg:text-right">
+              Интерактивна 3D сцена (WebGL) — движи мишката върху нея
+            </p>
           </div>
         </div>
 
@@ -181,23 +192,24 @@ export default function AgencyHome() {
 
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {WORK_PREVIEW.map((p) => (
-              <Link
-                key={p.title}
-                href="/agency-demo/proekti"
-                className="group overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
-              >
-                <div className={`h-44 bg-gradient-to-br ${p.gradient}`} />
-                <div className="p-6">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
-                    {p.category}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold text-white">{p.title}</h3>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 group-hover:text-white">
-                    Виж проекта
-                    <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </Link>
+              <TiltCard key={p.title}>
+                <Link
+                  href="/agency-demo/proekti"
+                  className="group block overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
+                >
+                  <div className={`h-44 bg-gradient-to-br ${p.gradient}`} />
+                  <div className="p-6">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
+                      {p.category}
+                    </p>
+                    <h3 className="mt-2 text-lg font-semibold text-white">{p.title}</h3>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 group-hover:text-white">
+                      Виж проекта
+                      <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </Link>
+              </TiltCard>
             ))}
           </div>
         </div>

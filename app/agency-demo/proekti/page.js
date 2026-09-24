@@ -1,4 +1,5 @@
 import AgencyCta from "@/components/agency/AgencyCta";
+import TiltCard from "@/components/agency/TiltCard";
 
 export const metadata = {
   title: "Проекти",
@@ -65,19 +66,18 @@ export default function WorkPage() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((p) => (
-            <div
-              key={p.title}
-              className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
-            >
-              <div className={`h-44 bg-gradient-to-br ${p.gradient}`} />
-              <div className="p-6">
-                <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
-                  {p.category}
-                </p>
-                <h3 className="mt-2 text-lg font-semibold text-white">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{p.description}</p>
+            <TiltCard key={p.title}>
+              <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900">
+                <div className={`h-44 bg-gradient-to-br ${p.gradient}`} />
+                <div className="p-6">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">
+                    {p.category}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{p.description}</p>
+                </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </section>
