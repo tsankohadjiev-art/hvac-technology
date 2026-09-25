@@ -17,6 +17,33 @@ export default function AdminDashboard({ initialProducts, initialSettings }) {
   const [confirmTarget, setConfirmTarget] = useState(null); // product pending delete confirmation
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState("");
+  const [backingUp, setBackingUp] = useState(false);
+
+  async function handleBackup() {
+    setBackingUp(true);
+    try {
+      const [productsRes, settingsRes] = await Promise.all([
+        fetch("/api/admin/products"),
+        fetch("/api/admin/settings"),
+      ]);
+      if (!productsRes.ok || !settingsRes.ok) throw new Error("Грешка при изтегляне на бекъпа.");
+      const [products, settings] = await Promise.all([productsRes.json(), settingsRes.json()]);
+      const backup = { exportedAt: new Date().toISOString(), products, settings };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `hvac-technology-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(err.message || "Грешка при изтегляне на бекъпа.");
+    } finally {
+      setBackingUp(false);
+    }
+  }
 
   useEffect(() => {
     function handleKeyDown(e) {
@@ -71,24 +98,34 @@ export default function AdminDashboard({ initialProducts, initialSettings }) {
   return (
     <div>
       <div className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl gap-1 px-6">
-          {[
-            { key: "products", label: "Продукти" },
-            { key: "settings", label: "Настройки на сайта" },
-          ].map((t) => (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => setTab(t.key)}
-              className={`border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${
-                tab === t.key
-                  ? "border-navy text-ink"
-                  : "border-transparent text-slate hover:text-ink"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-1 px-6">
+          <div className="flex gap-1">
+            {[
+              { key: "products", label: "Продукти" },
+              { key: "settings", label: "Настройки на сайта" },
+            ].map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setTab(t.key)}
+                className={`border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${
+                  tab === t.key
+                    ? "border-navy text-ink"
+                    : "border-transparent text-slate hover:text-ink"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleBackup}
+            disabled={backingUp}
+            className="shrink-0 rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate hover:border-navy hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {backingUp ? "Изтегляне..." : "Изтегли резервно копие"}
+          </button>
         </div>
       </div>
 
