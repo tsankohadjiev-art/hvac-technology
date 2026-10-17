@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import LocalBusinessJsonLd from "@/components/LocalBusinessJsonLd";
 
 // Страниците тук четат съдържание от админ панела (Vercel Blob). ISR
 // (revalidate) не засича надеждно новите Blob версии в тази Next.js
@@ -11,6 +12,7 @@ export const dynamic = "force-dynamic";
 export default function BgLayout({ children }) {
   return (
     <>
+      <LocalBusinessJsonLd />
       <Header lang="bg" />
       <main className="flex-1">{children}</main>
       <Footer lang="bg" />
