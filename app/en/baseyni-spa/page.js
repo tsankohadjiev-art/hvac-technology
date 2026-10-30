@@ -126,18 +126,21 @@ export default async function BaseyniSpaPageEn() {
           </div>
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
             {page.gallery.map((photo, idx) => (
-              <div
+              <a
                 key={idx}
-                className="relative aspect-square overflow-hidden rounded-2xl bg-mist"
+                href={photo.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative aspect-square overflow-hidden rounded-2xl bg-mist"
               >
                 <Image
                   src={photo.src}
                   alt={photo.alt?.en || ""}
                   fill
                   sizes="(max-width: 640px) 50vw, 33vw"
-                  className="object-cover"
+                  className="object-cover transition-transform group-hover:scale-105"
                 />
-              </div>
+              </a>
             ))}
           </div>
         </section>
