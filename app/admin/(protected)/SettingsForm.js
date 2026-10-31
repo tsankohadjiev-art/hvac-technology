@@ -16,7 +16,14 @@ async function uploadFile(file) {
   const fd = new FormData();
   fd.append("file", file);
   const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    // Сървър/платформа върна не-JSON отговор (напр. платформен лимит на
+    // размера на заявката) — показваме четим текст вместо грешката от парсъра.
+    throw new Error("Грешка при качване — файлът може да е твърде голям.");
+  }
   if (!res.ok) throw new Error(data.error || "Грешка при качване.");
   return data.url;
 }

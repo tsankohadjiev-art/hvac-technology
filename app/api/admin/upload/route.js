@@ -5,7 +5,11 @@ import path from "node:path";
 import crypto from "node:crypto";
 
 const ALLOWED = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
-const MAX_SIZE = 5 * 1024 * 1024;
+// Vercel-функциите имат платформен лимит на тялото на заявката под 5MB —
+// файл между ~4.5 и 5MB минаваше тази проверка, но биваше отхвърлен от
+// самия Vercel с текстов (не JSON) отговор "Request Entity Too Large",
+// което чупеше клиентския код, очакващ JSON. Пазим граница под лимита.
+const MAX_SIZE = 4 * 1024 * 1024;
 const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
 const useBlob = !!BLOB_TOKEN;
 
@@ -25,7 +29,7 @@ export async function POST(request) {
     return NextResponse.json({ error: "Позволени са само JPG, PNG или WebP снимки." }, { status: 400 });
   }
   if (file.size > MAX_SIZE) {
-    return NextResponse.json({ error: "Файлът е твърде голям (макс. 5MB)." }, { status: 400 });
+    return NextResponse.json({ error: "Файлът е твърде голям (макс. 4MB)." }, { status: 400 });
   }
 
   const ext = ALLOWED[file.type];
