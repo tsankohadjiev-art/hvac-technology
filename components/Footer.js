@@ -123,7 +123,9 @@ export default async function Footer({ lang = "bg" }) {
             {t.contactHeading}
           </h3>
           <ul className="mt-4 space-y-2.5 text-sm">
-            <li className="text-slate-400">{settings.contactName?.[lang] ?? ""}</li>
+            {settings.contactName?.[lang] && (
+              <li className="text-slate-400">{settings.contactName[lang]}</li>
+            )}
             <li>
               <a href={settings.phoneHref} className="transition-colors hover:text-white">
                 {settings.phone}

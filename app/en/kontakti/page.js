@@ -43,11 +43,11 @@ export default async function KontaktiPageEn() {
   )}`;
 
   const contactItems = [
-    { icon: UsersIcon, label: "Eng. Ts. Hadzhiev", href: null },
+    settings.contactName.en && { icon: UsersIcon, label: settings.contactName.en, href: null },
     { icon: PhoneIcon, label: settings.phone, href: phoneLink },
     { icon: MailIcon, label: settings.email, href: mailLink },
     { icon: MapPinIcon, label: settings.address.en, href: mapLink },
-  ];
+  ].filter(Boolean);
 
   const quickContacts = [
     {
