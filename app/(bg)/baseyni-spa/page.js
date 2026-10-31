@@ -59,7 +59,7 @@ export default async function BaseyniSpaPage() {
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-contain"
           />
         </div>
       </section>
