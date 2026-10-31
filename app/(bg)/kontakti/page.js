@@ -36,11 +36,11 @@ export default async function KontaktiPage() {
   )}`;
 
   const contactItems = [
-    { icon: UsersIcon, label: "инж. Ц. Хаджиев", href: null },
+    settings.contactName.bg && { icon: UsersIcon, label: settings.contactName.bg, href: null },
     { icon: PhoneIcon, label: settings.phone, href: phoneLink },
     { icon: MailIcon, label: settings.email, href: mailLink },
     { icon: MapPinIcon, label: address, href: mapLink },
-  ];
+  ].filter(Boolean);
 
   const quickContacts = [
     {
