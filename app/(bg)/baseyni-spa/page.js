@@ -52,14 +52,12 @@ export default async function BaseyniSpaPage() {
       />
 
       <section className="mx-auto max-w-7xl px-6 pt-16 lg:px-8">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-mist sm:aspect-[21/9]">
-          <Image
+        <div className="overflow-hidden rounded-3xl bg-mist">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={page.showcaseImage}
             alt="Изграден инфинити басейн от Hvac Technology"
-            fill
-            priority
-            sizes="100vw"
-            className="object-contain"
+            className="block h-auto w-full"
           />
         </div>
       </section>
