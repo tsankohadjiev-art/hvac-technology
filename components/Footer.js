@@ -21,7 +21,6 @@ const TEXT = {
     fbClimate: "Facebook — Климатизация",
     fbPool: "Facebook — Басейни и СПА",
     contactHeading: "Контакти",
-    engineer: "инж. Ц. Хаджиев",
     rights: "Всички права запазени.",
     home: "/",
     climateHref: "/klimatizatsia",
@@ -41,7 +40,6 @@ const TEXT = {
     fbClimate: "Facebook — Climate",
     fbPool: "Facebook — Pools & Spa",
     contactHeading: "Contact",
-    engineer: "Eng. Ts. Hadzhiev",
     rights: "All rights reserved.",
     home: "/en",
     climateHref: "/en/klimatizatsia",
@@ -125,7 +123,7 @@ export default async function Footer({ lang = "bg" }) {
             {t.contactHeading}
           </h3>
           <ul className="mt-4 space-y-2.5 text-sm">
-            <li className="text-slate-400">{t.engineer}</li>
+            <li className="text-slate-400">{settings.contactName[lang]}</li>
             <li>
               <a href={settings.phoneHref} className="transition-colors hover:text-white">
                 {settings.phone}
