@@ -322,6 +322,11 @@ export default function SettingsForm({ initialSettings }) {
     setForm((prev) => ({ ...prev, address: { ...prev.address, [lang]: value } }));
   }
 
+  function updateContactName(lang, value) {
+    setSaved(false);
+    setForm((prev) => ({ ...prev, contactName: { ...prev.contactName, [lang]: value } }));
+  }
+
   function updateHero(lang, field, value) {
     setSaved(false);
     setForm((prev) => ({
@@ -484,6 +489,13 @@ export default function SettingsForm({ initialSettings }) {
             className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-ink outline-none focus:border-climate focus:ring-2 focus:ring-climate/20"
           />
         </label>
+        <LangPair
+          label="Име за контакт"
+          bg={form.contactName.bg}
+          en={form.contactName.en}
+          onBgChange={(v) => updateContactName("bg", v)}
+          onEnChange={(v) => updateContactName("en", v)}
+        />
         <LangPair
           label="Адрес"
           bg={form.address.bg}
